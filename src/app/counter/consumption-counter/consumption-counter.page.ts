@@ -126,6 +126,9 @@ import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CameraPreview, CameraPreviewOptions, CameraPreviewPictureOptions } from '@capacitor-community/camera-preview';
 import { matFromImageData, cvtColor, COLOR_RGBA2GRAY, resize, adaptiveThreshold, bitwise_not, findContours, drawContours, contourArea } from '@techstark/opencv-js';
 import * as Tesseract from 'tesseract.js';
+import { CameraResultType, CameraSource, Camera } from '@capacitor/camera';
+import { createWorker } from 'tesseract.js';
+
 
 @Component({
   selector: 'app-consumption-counter',
@@ -135,6 +138,7 @@ import * as Tesseract from 'tesseract.js';
 export class ConsumptionCounterPage implements AfterViewInit {
   @ViewChild('previewCanvas', { static: false }) previewCanvas!: ElementRef;
   ocrResult: any;
+  image: any;
 
   private cameraPreviewOpts: CameraPreviewOptions = {
     position: 'rear',
@@ -151,94 +155,76 @@ export class ConsumptionCounterPage implements AfterViewInit {
   async ngAfterViewInit() {
     await CameraPreview.start(this.cameraPreviewOpts);
   }
-  async capturePhoto() {
-    const image = await CameraPreview.capture(this.captureOpts);
-    const imagePath = image.value;
-  
-    const croppedImage = this.cropImage(imagePath);
-    if (croppedImage !== undefined) {
-      const ocrResult = await this.performOCR(croppedImage);
-      this.ocrResult = ocrResult;
-      console.log('OCR Result:', ocrResult); // Affiche le résultat de l'OCR dans la console
-    } else {
-      console.error('Erreur lors du recadrage de l\'image');
+  async takePhoto() {
+    const cameraPreviewElement = this.previewCanvas.nativeElement;
+    const image = await Camera.getPhoto({
+      quality: 90,
+      allowEditing: false,
+      resultType: CameraResultType.Uri,
+    });
+
+    
+    if (image.webPath) {
+      const imageBlob = await fetch(image.webPath).then(r => r.blob());
+      const imageObjectURL = URL.createObjectURL(imageBlob);
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        const sourceX = 0; // Définissez la position de votre rectangle ici
+        const sourceY = 0; // Définissez la position de votre rectangle ici
+        const sourceWidth = img.width; // Définissez la taille de votre rectangle ici
+        const sourceHeight = 20; // La hauteur de votre rectangle
+        const destWidth = sourceWidth;
+        const destHeight = sourceHeight;
+        const destX = canvas.width / 2 - destWidth / 2;
+        const destY = canvas.height / 2 - destHeight / 2;
+        context?.drawImage(img, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+        const finalImage = canvas.toDataURL();
+        this.image = finalImage;
+      };
+      img.src = imageObjectURL;
     }
   }
   
-  async cropImage(imagePath: string): Promise<string | undefined> {
-    return new Promise<string | undefined>((resolve, reject) => {
-      const imageElement = new Image();
-      imageElement.onload = async () => {
-        const canvas = this.previewCanvas.nativeElement;
-        const context = canvas.getContext("2d");
-        context.drawImage(imageElement, 0, 0, canvas.width, canvas.height);
-  
-        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-        const src = matFromImageData(imageData);
-  
-        const gray = new cv.Mat();
-        cvtColor(src, gray, COLOR_RGBA2GRAY);
-  
-        const thresholded = new cv.Mat();
-        adaptiveThreshold(gray, thresholded, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 11, 2);
-  
-        const inverted = new cv.Mat();
-        bitwise_not(thresholded, inverted);
-  
-        const contours = new cv.MatVector();
-        const hierarchy = new cv.Mat();
-        findContours(inverted, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
-  
-        let largestContourArea = 0;
-        let largestContourIndex = -1;
-        const contoursSize = contours.size();
-        const desiredArea = 200; // Surface minimale du contour (en pixels carrés)
-        for (let i = 0; i < contoursSize.height; i++) {
-          const contour = contours.get(i);
-          const area = contourArea(contour, false);
-          if (area > largestContourArea && area < desiredArea) {
-            largestContourArea = area;
-            largestContourIndex = i;
-          }
-        }
-  
-        const result = new cv.Mat();
-        drawContours(src, contours, largestContourIndex, [0, 255, 0, 255], 2, cv.LINE_8, hierarchy, 0);
-  
-        const width = 200; // Largeur du rectangle (en pixels)
-        const height = 20; // Hauteur du rectangle (en pixels)
-        const desiredSize = new cv.Size(width, height);
-  
-        // Resize the image
-        const resized = new cv.Mat();
-        cv.resize(src, resized, desiredSize, 0, 0, cv.INTER_LINEAR);
-
-        // Convert resized image to data URL string
-        const resizedCanvas = document.createElement('canvas');
-        cv.imshow(resizedCanvas, resized);
-        const resizedDataUrl = resizedCanvas.toDataURL();
-
-        // Resolve the promise with the resized image data URL
-        resolve(resizedDataUrl);
-      };
-      imageElement.src = imagePath;
+  async recognizeImages() {
+    const worker = Tesseract.createWorker({
+      logger: m => console.log(m)
     });
+    await (await worker).load();
+    await (await worker).loadLanguage('fra');
+    await (await worker).initialize('fra');
+    const { data: { text } } = await (await worker).recognize(this.image);
+    this.ocrResult = text.replace(/\D/g,'');
+    await (await worker).terminate();
   }
-  
 
-  performOCR(image: any) {
-    // Code for performing OCR on the cropped image
-    // Replace this with your OCR implementation
-  
-    // Example code using Tesseract.js for OCR
-    Tesseract.recognize(image)
-      .then(({ data }) => {
-        this.ocrResult = data.text;
-      })
-      .catch((error) => {
-        console.error('OCR error:', error);
-      });
+  index = ['','','','','','',''];
+  numValues: string[] = [];
+  num2Values: string[] = [];
+  joinedValues: any;
+
+  addNumValue(value: string, index: number) {
+    console.log(value);
+    this.numValues[index] = value;
   }
+
+  addNum2Value(value: string, index : number) {
+    this.num2Values[index] = value;
+  }
+
+  maFonction(code: any) {
+    document.getElementById('code'+code);    
+  }
+
+  maFonction2(code: any) {
+    this.index[code] = '';
+  }
+
+  getJoinedValues() {
+    this.joinedValues = this.numValues.join('')+','+this.num2Values.join('');
+    console.log(this.joinedValues);
+}
 }
 
 

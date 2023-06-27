@@ -68,3 +68,19 @@ ion-content {
   transform: translate(-50%, -50%);
   width: 300px;
 }
+
+canvas {
+  filter: blur(8px);
+  position: relative;
+  &:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 20px;
+    width: 80%;
+    border: 1px solid white;
+    filter: blur(0);
+  }
+}
