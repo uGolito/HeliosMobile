@@ -9,10 +9,9 @@
 <ion-content class="ion-padding">
   <ion-img [src]="image"></ion-img>
   <ion-button color="success" expand="block" shape="round" size="medium" (click)="takePhoto()">Prendre une photo</ion-button>
-  <canvas #cameraPreview></canvas>
   <ion-button color="success" expand="block" shape="round" size="medium" (click)="recognizeImages()">Traduire l'image</ion-button>
   <ion-card-content style="color: white;">
-    Text décodé ! = {{ ocrResult }}
+    Text décodé = {{ ocrResult }}
   </ion-card-content>
   <div class="container">
     <form action="">

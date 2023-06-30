@@ -46,6 +46,7 @@
     "crypto-browserify": "^3.12.0",
     "ionicons": "^6.0.3",
     "jimp": "^0.22.8",
+    "ngx-image-cropper": "^7.0.1",
     "ngx-qrscanner": "^0.0.1-security",
     "ngx-socket-io": "^4.4.0",
     "path": "^0.12.7",
