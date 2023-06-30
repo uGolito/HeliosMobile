@@ -171,10 +171,10 @@ export class ConsumptionCounterPage implements AfterViewInit {
       img.onload = () => {
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
-        const sourceX = 0; // Définissez la position de votre rectangle ici
-        const sourceY = 0; // Définissez la position de votre rectangle ici
+        const sourceX = -50; // Définissez la position de votre rectangle ici
+        const sourceY = -50; // Définissez la position de votre rectangle ici
         const sourceWidth = img.width; // Définissez la taille de votre rectangle ici
-        const sourceHeight = 20; // La hauteur de votre rectangle
+        const sourceHeight = 60; // La hauteur de votre rectangle
         const destWidth = sourceWidth;
         const destHeight = sourceHeight;
         const destX = canvas.width / 2 - destWidth / 2;
