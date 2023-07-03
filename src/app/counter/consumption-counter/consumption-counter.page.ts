@@ -4,20 +4,26 @@ import { CameraResultType, CameraSource, Camera } from '@capacitor/camera';
 import { NavController } from '@ionic/angular';
 import * as Tesseract from 'tesseract.js';
 import { createWorker } from 'tesseract.js';
-
+import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
+import { DomSanitizer } from '@angular/platform-browser';
+import { CameraPreview, CameraPreviewPictureOptions, CameraPreviewOptions, CameraPreviewDimensions } from '@awesome-cordova-plugins/camera-preview/ngx';
 
 @Component({
   selector: 'app-consumption-counter',
   templateUrl: './consumption-counter.page.html',
   styleUrls: ['./consumption-counter.page.scss'],
 })
+
 export class ConsumptionCounterPage {
   ocrResult: string | undefined;
   worker: Tesseract.Worker | undefined;
   workerReady = false;
   image: any;
 
-  constructor(public navCtrl: NavController, private route: Router) {
+  imageChangedEvent: any = '';
+  croppedImage: any = '';
+
+  constructor(public navCtrl: NavController, private route: Router, private sanitizer: DomSanitizer, private cameraPreview: CameraPreview) {
     this.loadWorker();
    }
 
@@ -106,6 +112,7 @@ export class ConsumptionCounterPage {
   }
 
   ngOnInit() {
+    this.startCameraPreview();
   }
 
   navigation(url : String) {
@@ -120,6 +127,67 @@ export class ConsumptionCounterPage {
     this.index[code] = '';
   }
 
+  fileChangeEvent(event: any): void {
+    this.imageChangedEvent = event;
+  }
+  imageCropped(event: ImageCroppedEvent) {
+    if (event && event.objectUrl) {
+      this.croppedImage = event.base64;
+      // event.blob can be used to upload the cropped image
+    }
+  }
+  imageLoaded(image: LoadedImage) {
+      // show cropper
+  }
+  cropperReady() {
+      // cropper ready
+  }
+  loadImageFailed() {
+      // show message
+  }
+
+  startCameraPreview() {
+    const cameraPreviewOpts: CameraPreviewOptions = {
+      x: 0,
+      y: 0,
+      width: window.screen.width,
+      height: window.screen.height,
+      camera: 'rear',
+      toBack: true,
+      tapPhoto: false,
+      tapFocus: false,
+      previewDrag: false,
+      storeToFile: false,
+      disableExifHeaderStripping: false
+    };
+  
+    this.cameraPreview.startCamera(cameraPreviewOpts);
+  }
+
+  base64Image: string | undefined;
+
+  async captureImage() {
+    const imageData: any = await this.cameraPreview.takePicture({ width: 800, height: 600, quality: 85 });
+    this.base64Image = 'data:image/jpeg;base64,' + imageData;
+  
+    // Convert base64 image to blob
+    const fetchRes = await fetch(this.base64Image);
+    const blob = await fetchRes.blob();
+  
+    // Create a new file from the blob
+    const file = new File([blob], 'image.jpg', { type: 'image/jpeg' });
+  
+    // Create a new 'change' event with the file
+    const event = new Event('change', { bubbles: true });
+    Object.defineProperty(event, 'target', {
+      writable: false,
+      value: { files: [file] }
+    });
+  
+    // Trigger the 'change' event
+    this.fileChangeEvent(event);
+  }
+    
 }
 
 
