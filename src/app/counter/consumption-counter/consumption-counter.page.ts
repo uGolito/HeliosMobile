@@ -201,29 +201,41 @@ export class ConsumptionCounterPage {
     overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
     document.body.appendChild(overlay);
   
-    // Capture the image
-    const imageData: any = await this.cameraPreview.takePicture({ width: 800, height: 600, quality: 85 });
-    this.base64Image = 'data:image/jpeg;base64,' + imageData;
+    // Add a button to the overlay
+    const captureButton = document.createElement('button');
+    captureButton.innerText = 'Capture';
+    captureButton.style.position = 'absolute';
+    captureButton.style.bottom = '20px';
+    captureButton.style.left = '50%';
+    captureButton.style.transform = 'translateX(-50%)';
+    overlay.appendChild(captureButton);
   
-    // Remove the overlay
-    document.body.removeChild(overlay);
+    // Capture the image when the button is clicked
+    captureButton.addEventListener('click', async () => {
+      // Capture the image
+      const imageData: any = await this.cameraPreview.takePicture({ width: 800, height: 600, quality: 85 });
+      this.base64Image = 'data:image/jpeg;base64,' + imageData;
   
-    // Convert base64 image to blob
-    const fetchRes = await fetch(this.base64Image);
-    const blob = await fetchRes.blob();
+      // Remove the overlay
+      document.body.removeChild(overlay);
   
-    // Create a new file from the blob
-    const file = new File([blob], 'image.jpg', { type: 'image/jpeg' });
+      // Convert base64 image to blob
+      const fetchRes = await fetch(this.base64Image);
+      const blob = await fetchRes.blob();
   
-    // Create a new 'change' event with the file
-    const event = new Event('change', { bubbles: true });
-    Object.defineProperty(event, 'target', {
-      writable: false,
-      value: { files: [file] }
+      // Create a new file from the blob
+      const file = new File([blob], 'image.jpg', { type: 'image/jpeg' });
+  
+      // Create a new 'change' event with the file
+      const event = new Event('change', { bubbles: true });
+      Object.defineProperty(event, 'target', {
+        writable: false,
+        value: { files: [file] }
+      });
+  
+      // Trigger the 'change' event
+      this.fileChangeEvent(event);
     });
-  
-    // Trigger the 'change' event
-    this.fileChangeEvent(event);
   }
 }
 
