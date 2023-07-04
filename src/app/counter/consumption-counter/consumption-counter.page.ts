@@ -23,6 +23,8 @@ export class ConsumptionCounterPage {
   imageChangedEvent: any = '';
   croppedImage: any = '';
 
+  cameraActive: boolean = false;
+
   constructor(public navCtrl: NavController, private route: Router, private sanitizer: DomSanitizer, private cameraPreview: CameraPreview) {
     this.loadWorker();
    }
@@ -158,10 +160,10 @@ export class ConsumptionCounterPage {
       tapFocus: false,
       previewDrag: false,
       storeToFile: false,
-      disableExifHeaderStripping: false
+      disableExifHeaderStripping: false,
     };
-  
     this.cameraPreview.startCamera(cameraPreviewOpts);
+    this.cameraActive = true;
   }
 
   base64Image: string | undefined;
