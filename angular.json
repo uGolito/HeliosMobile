@@ -43,7 +43,8 @@
               "node_modules/path-browserify/index.js",
               "node_modules/crypto-browserify/index.js",
               "node_modules/stream-browserify/index.js",
-              "node_modules/path-browserify/index.js"
+              "node_modules/path-browserify/index.js",
+              "node_modules/hammerjs/hammer.min.js"
             ]
           },
           "configurations": {

@@ -4,9 +4,19 @@ import { CameraResultType, CameraSource, Camera } from '@capacitor/camera';
 import { NavController } from '@ionic/angular';
 import * as Tesseract from 'tesseract.js';
 import { createWorker } from 'tesseract.js';
-import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
+import { CropperPosition, LoadedImage, ImageCroppedEvent as LocalImageCroppedEvent } from 'ngx-image-cropper';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CameraPreview, CameraPreviewPictureOptions, CameraPreviewOptions, CameraPreviewDimensions } from '@awesome-cordova-plugins/camera-preview/ngx';
+import 'hammerjs';
+
+export interface ImageCroppedEvent {
+  base64?: string;
+  file?: File;
+  width?: number;
+  height?: number;
+  cropperPosition?: CropperPosition;
+  imagePosition?: CropperPosition;
+}
 
 @Component({
   selector: 'app-consumption-counter',
@@ -19,11 +29,13 @@ export class ConsumptionCounterPage {
   worker: Tesseract.Worker | undefined;
   workerReady = false;
   image: any;
+  showBody = true;
 
   imageChangedEvent: any = '';
   croppedImage: any = '';
 
   cameraActive: boolean = false;
+  cropper: any;
 
   constructor(public navCtrl: NavController, private route: Router, private sanitizer: DomSanitizer, private cameraPreview: CameraPreview) {
     this.loadWorker();
@@ -114,7 +126,7 @@ export class ConsumptionCounterPage {
   }
 
   ngOnInit() {
-    this.startCameraPreview();
+    
   }
 
   navigation(url : String) {
@@ -132,9 +144,10 @@ export class ConsumptionCounterPage {
   fileChangeEvent(event: any): void {
     this.imageChangedEvent = event;
   }
-  imageCropped(event: ImageCroppedEvent) {
-    if (event && event.objectUrl) {
-      this.croppedImage = event.base64;
+  
+  imageCropped(event: LocalImageCroppedEvent): void {
+    if (event && event.base64 != null) {
+      this.croppedImage = event.base64 ?? undefined;
       // event.blob can be used to upload the cropped image
     }
   }
@@ -190,6 +203,7 @@ export class ConsumptionCounterPage {
   //  this.fileChangeEvent(event);
   //}
   async captureImage() {
+    this.showBody = false;
     // Add code to show overlay or preview
     // For example, you can create an HTML element to display the overlay
     const overlay = document.createElement('div');
@@ -235,6 +249,18 @@ export class ConsumptionCounterPage {
   
       // Trigger the 'change' event
       this.fileChangeEvent(event);
+      
+      // Crop the image based on the cropper position
+      const croppedEvent: ImageCroppedEvent = {
+        base64: this.croppedImage,
+        file: file,
+        width: this.cropper.position?.width ?? 0,
+        height: 100,
+        cropperPosition: this.cropper.position
+      };
+      this.imageCropped(croppedEvent as LocalImageCroppedEvent);
+
+      this.showBody = true;
     });
   }
 }

@@ -6,11 +6,8 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <input type="file" (change)="fileChangeEvent($event)" />
-  <ion-img [src]="croppedImage"></ion-img>
-
-  
+<ion-content class="ion-padding" *ngIf="showBody">
+    
   <!-- <image-cropper
       [imageChangedEvent]="imageChangedEvent"
       [maintainAspectRatio]="true"
