@@ -146,8 +146,11 @@ export class ConsumptionCounterPage {
   
   imageCropped(event: ImageCroppedEvent): void {
     if (event && event.blob) {
-      this.croppedImage = event.blob;
-      // event.blob can be used to upload the cropped image
+      //this.croppedImage = event.blob;
+      const croppedImageUrl = URL.createObjectURL(event.blob);
+
+      // Update the croppedImage with the data URL
+      this.croppedImage = croppedImageUrl;
     }
   }
   imageLoaded(image: LoadedImage) {
@@ -243,10 +246,16 @@ export class ConsumptionCounterPage {
       // Convert base64 image to blob
       const fetchRes = await fetch(this.base64Image);
       const blob = await fetchRes.blob();
+
+      // Convert blob to data URL
+      const croppedImageUrl = URL.createObjectURL(blob);
+
+      // Update the croppedImage with the data URL
+      this.croppedImage = croppedImageUrl;
       
       // Crop the image based on the cropper position
       const croppedEvent: ImageCroppedEvent = {
-        blob: blob,
+        objectUrl: croppedImageUrl,
         width: 400,
         height: 200,
         cropperPosition: this.cropper,
