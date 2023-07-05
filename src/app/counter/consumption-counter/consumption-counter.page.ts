@@ -227,6 +227,7 @@ export class ConsumptionCounterPage {
     cropperElement.style.width = '80%';
     cropperElement.style.height = '50%';
     cropperElement.style.border = '2px dashed white';
+    cropperElement.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
     overlay.appendChild(cropperElement);
   
     // Add a button to the overlay
@@ -282,8 +283,13 @@ export class ConsumptionCounterPage {
       };
       this.imageCropped(croppedEvent as LocalImageCroppedEvent);
 
-      this.showBody = true;
+      // Close the camera preview
+      this.cameraPreview.stopCamera();
+      
+      // Navigate back to the consumption-counter page
       this.navCtrl.navigateRoot('/consumption-counter');
+
+      this.showBody = true;
     });
   }
 }
