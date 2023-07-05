@@ -234,26 +234,15 @@ export class ConsumptionCounterPage {
       const cropperPosition = cropperElement.getBoundingClientRect();
 
       // Capture the image within the cropping rectangle
-      const imageData: any = await this.cameraPreview.takePicture({
+      const imageData: any = this.cameraPreview.takePicture({
         width: cropperPosition.width,
         height: cropperPosition.height,
         quality: 85
       });
       this.base64Image = 'data:image/jpeg;base64,' + imageData;
-      this.imageCropper?.crop("base64");
   
       // Remove the overlay
       document.body.removeChild(overlay);
-  
-      // Create a new 'change' event with the file
-      const event = new Event('change', { bubbles: true });
-      Object.defineProperty(event, 'target', {
-        writable: false,
-        value: { files: [this.base64Image] }
-      });
-  
-      // Trigger the 'change' event
-      this.fileChangeEvent(event);
       
       // Crop the image based on the cropper position
       const croppedEvent: ImageCroppedEvent = {
