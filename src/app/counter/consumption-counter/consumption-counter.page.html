@@ -22,12 +22,13 @@
 
   <image-cropper
     [imageChangedEvent]="imageChangedEvent"
-    [cropper]="{ x1: 169, y1: 32, x2: 326, y2: 83 }"
     [aspectRatio]="6 / 1.5"
     format="jpeg"
     [autoCrop]="false"
     crop="base64"
+    (imageLoaded)="imageLoaded($event)"
     (imageCropped)="imageCropped($event)"
+    (cropperReady)="cropperReady()"
   ></image-cropper>
 
   <img [src]="imageCropped" />

@@ -139,10 +139,8 @@ export class ConsumptionCounterPage {
   }
   
   imageCropped(event: ImageCroppedEvent): void {
-    if (event) {
       this.croppedImage = event.base64;
       // event.blob can be used to upload the cropped image
-    }
   }
   imageLoaded(image: LoadedImage) {
       // show cropper
@@ -268,15 +266,41 @@ export class ConsumptionCounterPage {
       this.imageCropped(croppedEvent);
 
       // Close the camera preview
+      if (this.cameraPreview) {
+        this.cameraPreview.stopCamera();
+      }
       this.cameraPreview.stopCamera();
 
+      if (this.cameraActive) {
+        this.cameraActive = false;
+      }
       this.cameraActive = false;
       
       // Navigate back to the consumption-counter page
       this.navCtrl.navigateRoot('/consumption-counter');
 
+      if (!this.showBody) {
+        this.showBody = true;
+      }
       this.showBody = true;
     });
+    if (this.cameraPreview) {
+      this.cameraPreview.stopCamera();
+    }
+    this.cameraPreview.stopCamera();
+
+    if (this.cameraActive) {
+      this.cameraActive = false;
+    }
+    this.cameraActive = false;
+    
+    // Navigate back to the consumption-counter page
+    this.navCtrl.navigateRoot('/consumption-counter');
+
+    if (!this.showBody) {
+      this.showBody = true;
+    }
+    this.showBody = true;
   }
 }
 
