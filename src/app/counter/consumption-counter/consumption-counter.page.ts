@@ -254,6 +254,8 @@ export class ConsumptionCounterPage {
       };
       this.imageCropped(croppedEvent);
 
+      this.croppedImage = croppedEvent.blob;
+
       this.imageCropper?.crop();
 
       this.showBody = true;
