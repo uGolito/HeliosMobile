@@ -152,6 +152,9 @@ export class ConsumptionCounterPage {
       const imageElement = document.createElement('img');
       imageElement.src = this.croppedImage;
       document.body.appendChild(imageElement);
+
+      this.cameraPreview.stopCamera();
+      this.navCtrl.navigateRoot('/comsuption-counter');
     }
   }
   imageLoaded(image: LoadedImage) {
