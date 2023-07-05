@@ -189,28 +189,7 @@ export class ConsumptionCounterPage {
 
   base64Image: string | undefined;
 
-  //async captureImage() {
-  //  const imageData: any = await this.cameraPreview.takePicture({ width: 800, height: 600, quality: 85 });
-  //  this.base64Image = 'data:image/jpeg;base64,' + imageData;
-  
-    // Convert base64 image to blob
-  //  const fetchRes = await fetch(this.base64Image);
-  //  const blob = await fetchRes.blob();
-  
-    // Create a new file from the blob
-  //  const file = new File([blob], 'image.jpg', { type: 'image/jpeg' });
-  
-    // Create a new 'change' event with the file
-  //  const event = new Event('change', { bubbles: true });
-  //  Object.defineProperty(event, 'target', {
-  //    writable: false,
-  //    value: { files: [file] }
-  //  });
-  
-    // Trigger the 'change' event
-  //  this.fileChangeEvent(event);
-  //}
-  captureImage() {
+  async captureImage() {
     this.showBody = false;
     // Add code to show overlay or preview
     // For example, you can create an HTML element to display the overlay
@@ -274,6 +253,8 @@ export class ConsumptionCounterPage {
         imagePosition: this.cropper
       };
       this.imageCropped(croppedEvent);
+
+      this.imageCropper?.crop();
 
       this.showBody = true;
     });
