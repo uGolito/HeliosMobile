@@ -4,19 +4,11 @@ import { CameraResultType, CameraSource, Camera } from '@capacitor/camera';
 import { NavController } from '@ionic/angular';
 import * as Tesseract from 'tesseract.js';
 import { createWorker } from 'tesseract.js';
-import { CropperPosition, LoadedImage, ImageCroppedEvent as LocalImageCroppedEvent } from 'ngx-image-cropper';
+import { CropperPosition, LoadedImage, ImageCroppedEvent } from 'ngx-image-cropper';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CameraPreview, CameraPreviewPictureOptions, CameraPreviewOptions, CameraPreviewDimensions } from '@awesome-cordova-plugins/camera-preview/ngx';
 import 'hammerjs';
 
-export interface ImageCroppedEvent {
-  base64?: string;
-  file?: File;
-  width?: number;
-  height?: number;
-  cropperPosition?: CropperPosition;
-  imagePosition?: CropperPosition;
-}
 
 @Component({
   selector: 'app-consumption-counter',
@@ -145,14 +137,10 @@ export class ConsumptionCounterPage {
     this.imageChangedEvent = event;
   }
   
-  imageCropped(event: LocalImageCroppedEvent): void {
+  imageCropped(event: ImageCroppedEvent): void {
     if (event && event.base64 != null) {
-      this.croppedImage = event.base64 ?? undefined;
+      this.croppedImage = event.base64;
       // event.blob can be used to upload the cropped image
-      const imageElement = document.createElement('img');
-      imageElement.src = this.croppedImage;
-      document.body.appendChild(imageElement);
-
       this.cameraPreview.stopCamera();
       this.navCtrl.navigateRoot('/comsuption-counter');
     }
@@ -259,18 +247,11 @@ export class ConsumptionCounterPage {
       // Remove the overlay
       document.body.removeChild(overlay);
   
-      // Convert base64 image to blob
-      const fetchRes = await fetch(this.base64Image);
-      const blob = await fetchRes.blob();
-  
-      // Create a new file from the blob
-      const file = new File([blob], 'image.jpg', { type: 'image/jpeg' });
-  
       // Create a new 'change' event with the file
       const event = new Event('change', { bubbles: true });
       Object.defineProperty(event, 'target', {
         writable: false,
-        value: { files: [file] }
+        value: { files: [this.base64Image] }
       });
   
       // Trigger the 'change' event
@@ -279,12 +260,12 @@ export class ConsumptionCounterPage {
       // Crop the image based on the cropper position
       const croppedEvent: ImageCroppedEvent = {
         base64: this.croppedImage,
-        file: file,
         width: this.cropper.position?.width ?? 100,
         height: 50,
-        cropperPosition: this.cropper.position
+        cropperPosition: this.cropper.position,
+        imagePosition: this.cropper.position
       };
-      this.imageCropped(croppedEvent as LocalImageCroppedEvent);
+      this.imageCropped(croppedEvent);
 
       // Close the camera preview
       this.cameraPreview.stopCamera();
