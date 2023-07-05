@@ -142,8 +142,6 @@ export class ConsumptionCounterPage {
     if (event) {
       this.croppedImage = event.base64;
       // event.blob can be used to upload the cropped image
-      this.cameraPreview.stopCamera();
-      this.navCtrl.navigateRoot('/comsuption-counter');
     }
   }
   imageLoaded(image: LoadedImage) {
@@ -271,6 +269,8 @@ export class ConsumptionCounterPage {
 
       // Close the camera preview
       this.cameraPreview.stopCamera();
+
+      this.cameraActive = false;
       
       // Navigate back to the consumption-counter page
       this.navCtrl.navigateRoot('/consumption-counter');
