@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { CameraResultType, CameraSource, Camera } from '@capacitor/camera';
 import { NavController } from '@ionic/angular';
 import * as Tesseract from 'tesseract.js';
 import { createWorker } from 'tesseract.js';
-import { CropperPosition, LoadedImage, ImageCroppedEvent } from 'ngx-image-cropper';
+import { CropperPosition, LoadedImage, ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CameraPreview, CameraPreviewPictureOptions, CameraPreviewOptions, CameraPreviewDimensions } from '@awesome-cordova-plugins/camera-preview/ngx';
 import 'hammerjs';
@@ -22,6 +22,7 @@ export class ConsumptionCounterPage {
   workerReady = false;
   image: any;
   showBody = true;
+  @ViewChild(ImageCropperComponent) imageCropper: ImageCropperComponent | undefined;
 
   imageChangedEvent: any = '';
   croppedImage: any = '';
@@ -138,7 +139,7 @@ export class ConsumptionCounterPage {
   }
   
   imageCropped(event: ImageCroppedEvent): void {
-    if (event && event.base64 != null) {
+    if (event) {
       this.croppedImage = event.base64;
       // event.blob can be used to upload the cropped image
       this.cameraPreview.stopCamera();
@@ -243,6 +244,7 @@ export class ConsumptionCounterPage {
         quality: 85
       });
       this.base64Image = 'data:image/jpeg;base64,' + imageData;
+      this.imageCropper?.crop("base64");
   
       // Remove the overlay
       document.body.removeChild(overlay);
