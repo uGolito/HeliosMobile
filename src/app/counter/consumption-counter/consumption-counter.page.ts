@@ -126,7 +126,7 @@ export class ConsumptionCounterPage {
   }
 
   ngOnInit() {
-    
+    this.startCameraPreview();
   }
 
   navigation(url : String) {
