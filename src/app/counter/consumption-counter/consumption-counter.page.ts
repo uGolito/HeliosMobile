@@ -22,13 +22,19 @@ export class ConsumptionCounterPage {
   workerReady = false;
   image: any;
   showBody = true;
+  showCropper = false;
   @ViewChild(ImageCropperComponent) imageCropper: ImageCropperComponent | undefined;
+  cropper = {
+    x1: 100,
+    y1: 100,
+    x2: 200,
+    y2: 200
+  }
 
   imageChangedEvent: any = '';
   croppedImage: any = '';
 
   cameraActive: boolean = false;
-  cropper: any;
 
   constructor(public navCtrl: NavController, private route: Router, private sanitizer: DomSanitizer, private cameraPreview: CameraPreview) {
     this.loadWorker();
@@ -139,11 +145,22 @@ export class ConsumptionCounterPage {
   }
   
   imageCropped(event: ImageCroppedEvent): void {
-      this.croppedImage = event.base64;
+    if (event && event.blob) {
+      this.croppedImage = event.blob;
       // event.blob can be used to upload the cropped image
+    }
   }
   imageLoaded(image: LoadedImage) {
       // show cropper
+      this.showCropper = true;
+      setTimeout(() => {
+        this.cropper = {
+          x1: 100,
+          y1: 100,
+          x2: 300,
+          y2: 200
+        }
+      });
   }
   cropperReady() {
       // cropper ready
@@ -193,7 +210,7 @@ export class ConsumptionCounterPage {
     // Trigger the 'change' event
   //  this.fileChangeEvent(event);
   //}
-  async captureImage() {
+  captureImage() {
     this.showBody = false;
     // Add code to show overlay or preview
     // For example, you can create an HTML element to display the overlay
@@ -234,43 +251,30 @@ export class ConsumptionCounterPage {
       const cropperPosition = cropperElement.getBoundingClientRect();
 
       // Capture the image within the cropping rectangle
-      const imageData: any = this.cameraPreview.takePicture({
-        width: cropperPosition.width,
-        height: cropperPosition.height,
+      const imageData: any = await this.cameraPreview.takePicture({
+        width: 800,
+        height: 600,
         quality: 85
       });
       this.base64Image = 'data:image/jpeg;base64,' + imageData;
   
       // Remove the overlay
       document.body.removeChild(overlay);
+
+      // Convert base64 image to blob
+      const fetchRes = await fetch(this.base64Image);
+      const blob = await fetchRes.blob();
       
       // Crop the image based on the cropper position
       const croppedEvent: ImageCroppedEvent = {
-        base64: this.croppedImage,
-        width: this.cropper.position?.width ?? 100,
-        height: 50,
-        cropperPosition: this.cropper.position,
-        imagePosition: this.cropper.position
+        blob: blob,
+        width: 400,
+        height: 200,
+        cropperPosition: this.cropper,
+        imagePosition: this.cropper
       };
       this.imageCropped(croppedEvent);
 
-      // Close the camera preview
-      if (this.cameraPreview) {
-        this.cameraPreview.stopCamera();
-      }
-      this.cameraPreview.stopCamera();
-
-      if (this.cameraActive) {
-        this.cameraActive = false;
-      }
-      this.cameraActive = false;
-      
-      // Navigate back to the consumption-counter page
-      this.navCtrl.navigateRoot('/consumption-counter');
-
-      if (!this.showBody) {
-        this.showBody = true;
-      }
       this.showBody = true;
     });
   }
