@@ -149,6 +149,9 @@ export class ConsumptionCounterPage {
     if (event && event.base64 != null) {
       this.croppedImage = event.base64 ?? undefined;
       // event.blob can be used to upload the cropped image
+      const imageElement = document.createElement('img');
+      imageElement.src = this.croppedImage;
+      document.body.appendChild(imageElement);
     }
   }
   imageLoaded(image: LoadedImage) {
@@ -212,8 +215,19 @@ export class ConsumptionCounterPage {
     overlay.style.left = '0';
     overlay.style.width = '100%';
     overlay.style.height = '100%';
-    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
     document.body.appendChild(overlay);
+
+    // Create a cropping rectangle overlay
+    const cropperElement = document.createElement('div');
+    cropperElement.style.position = 'absolute';
+    cropperElement.style.top = '50%';
+    cropperElement.style.left = '50%';
+    cropperElement.style.transform = 'translate(-50%, -50%)';
+    cropperElement.style.width = '80%';
+    cropperElement.style.height = '50%';
+    cropperElement.style.border = '2px dashed white';
+    overlay.appendChild(cropperElement);
   
     // Add a button to the overlay
     const captureButton = document.createElement('button');
@@ -227,7 +241,15 @@ export class ConsumptionCounterPage {
     // Capture the image when the button is clicked
     captureButton.addEventListener('click', async () => {
       // Capture the image
-      const imageData: any = await this.cameraPreview.takePicture({ width: 800, height: 600, quality: 85 });
+      // Get the position of the cropping rectangle
+      const cropperPosition = cropperElement.getBoundingClientRect();
+
+      // Capture the image within the cropping rectangle
+      const imageData: any = await this.cameraPreview.takePicture({
+        width: cropperPosition.width,
+        height: cropperPosition.height,
+        quality: 85
+      });
       this.base64Image = 'data:image/jpeg;base64,' + imageData;
   
       // Remove the overlay
@@ -254,13 +276,14 @@ export class ConsumptionCounterPage {
       const croppedEvent: ImageCroppedEvent = {
         base64: this.croppedImage,
         file: file,
-        width: this.cropper.position?.width ?? 0,
-        height: 100,
+        width: this.cropper.position?.width ?? 100,
+        height: 50,
         cropperPosition: this.cropper.position
       };
       this.imageCropped(croppedEvent as LocalImageCroppedEvent);
 
       this.showBody = true;
+      this.navCtrl.navigateRoot('/consumption-counter');
     });
   }
 }
