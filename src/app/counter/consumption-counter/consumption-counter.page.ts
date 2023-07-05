@@ -284,22 +284,6 @@ export class ConsumptionCounterPage {
       }
       this.showBody = true;
     });
-    if (this.cameraPreview) {
-      this.cameraPreview.stopCamera();
-    }
-    this.cameraPreview.stopCamera();
-
-    if (this.cameraActive) {
-      this.cameraActive = false;
-    }
-    this.cameraActive = false;
-    
-    // Navigate back to the consumption-counter page
-    this.navCtrl.navigateRoot('/consumption-counter');
-
-    if (!this.showBody) {
-      this.showBody = true;
-    }
     this.showBody = true;
   }
 }
