@@ -284,7 +284,6 @@ export class ConsumptionCounterPage {
       }
       this.showBody = true;
     });
-    this.showBody = true;
   }
 }
 
