@@ -258,7 +258,12 @@ export class ConsumptionCounterPage {
         objectUrl: croppedImageUrl,
         width: 400,
         height: 200,
-        cropperPosition: this.cropper,
+        cropperPosition : {
+          x1: 200,
+          y1: 200,
+          x2: 400,
+          y2: 200
+        },
         imagePosition: this.cropper
       };
       this.imageCropped(croppedEvent);
