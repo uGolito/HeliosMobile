@@ -146,6 +146,12 @@ export class ConsumptionCounterPage {
     this.navCtrl.navigateRoot('/input-comsuption');
   }
 
+  cropper = {
+    x1: 100,
+    y1: 100,
+    x2: 200,
+    y2: 200
+  }
 
   numValues: string[] = [];
   num2Values: string[] = [];
@@ -281,11 +287,20 @@ export class ConsumptionCounterPage {
         height: 600,
         quality: 85
       });
-      this.imageChangedEvent = 'data:image/jpeg;base64,' + imageData;
-    });
+      this.base64Image = 'data:image/jpeg;base64,' + imageData;
 
-    // Remove the overlay
-    document.body.removeChild(overlay);
+           // Convert base64 image to blob
+       const fetchRes = await fetch(this.base64Image);
+       const blob = await fetchRes.blob();
+
+       // Convert blob to data URL
+       this.imageChangedEvent = blob;
+
+
+      // Remove the overlay
+      this.showBody = true;
+      document.body.removeChild(overlay);
+    });
 
   //     // Convert base64 image to blob
   //     const fetchRes = await fetch(this.base64Image);
@@ -316,7 +331,7 @@ export class ConsumptionCounterPage {
 
   //     this.imageCropper?.crop();
 
-       this.showBody = true;
+       
   //   });
   }
 }

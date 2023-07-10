@@ -16,6 +16,7 @@
     [aspectRatio]="6 / 1.5"
     [autoCrop]=false
     format="png"
+    [cropper]="cropper"
     (imageCropped)="imageCropped($event)"
     (imageLoaded)="imageLoaded($event)"
     (cropperReady)="cropperReady()"
