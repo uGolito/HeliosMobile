@@ -16,38 +16,19 @@
     [aspectRatio]="6 / 1.5"
     [autoCrop]=false
     format="png"
-
     (imageCropped)="imageCropped($event)"
     (imageLoaded)="imageLoaded($event)"
     (cropperReady)="cropperReady()"
     (loadImageFailed)="loadImageFailed()"
 ></image-cropper>
-<ion-button color="success" expand="block" shape="round" size="medium" (click)="crop()">CROP THE PHOTO</ion-button>
+<ion-button expand="block" shape="round" size="medium" (click)="crop()">CROP THE PHOTO</ion-button>
 
 <img [src]="croppedImage" />
 
+  <ion-button expand="block" shape="round" size="medium" >Prendre une photo</ion-button>
 
-  <!-- <image-cropper
-    [imageChangedEvent]="imageChangedEvent"
-    [aspectRatio]="6 / 1.5"
-    format="jpeg"
-    [cropper]="cropper"
-    [autoCrop]="false"
-    crop="base64"
-    (imageLoaded)="imageLoaded($event)"
-    (imageCropped)="imageCropped($event)"
-    (cropperReady)="cropperReady()"
-  ></image-cropper> -->
-
-  <!--<img [src]="croppedImage"/>
-  <img [src]="base64Image">-->
-  <ion-button color="success" expand="block" shape="round" size="medium" >Prendre une photo</ion-button>
-
-  <!-- <ion-button color="success" expand="block" shape="round" size="medium" (click)="captureImage()">Prendre une photo</ion-button> -->
-  <ion-button color="success" expand="block" shape="round" size="medium" (click)="recognizeCropped()">Traduire l'image</ion-button>
-  <ion-card-content style="color: white;">
-    Le texte décodé est = {{ ocrResult }}
-  </ion-card-content>
+  <!-- <ion-button  expand="block" shape="round" size="medium" (click)="captureImage()">Prendre une photo</ion-button> -->
+  <ion-button  expand="block" shape="round" size="medium" (click)="recognizeCropped()">Traduire l'image</ion-button>
   <div class="container">
     <form action="">
       <div class="container-form">
@@ -62,7 +43,7 @@
         <input type="tel" inputmode="numeric" class="num num2" id="code9" [(ngModel)]="index[8]" maxlength="1" (ngModelChange)="addNum2Value($event, 8)" (focus)="maFonction2(8)" required [ngModelOptions]="{standalone: true}">
       </div>  
     </form>
-    <ion-button color="success" expand="block" shape="round" size="large" (click)="getJoinedValues()">Confirm</ion-button> 
+    <ion-button expand="block" shape="round" size="large" (click)="getJoinedValues()">Confirmer</ion-button> 
     <div>{{ joinedValues }}</div>  
   </div>
 </ion-content>
