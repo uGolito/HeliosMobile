@@ -1,0 +1,57 @@
+ion-content {
+  --background: #333;
+  --overflow: hidden;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+}
+
+.container-form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  max-width: 400px; /* Définissez une largeur maximale pour éviter le débordement sur les petits écrans */
+}
+
+.num {
+  background-color: transparent;
+  width: 50px;
+  text-align: center;
+  outline: none;
+  font-size: 2rem;
+  border: 1px solid rgba(255, 255, 255, .3);
+  border-radius: .5rem;
+  color: white;
+  font-family: futura;
+  background: url('../../../assets/images/single-counter.png') no-repeat;
+  background-size: contain;
+  background-position: center;
+  height: 66px;
+  padding-left: 4px;
+}
+
+.num2 {
+  color: black;
+  background: url('../../../assets/images/single-counter-dec.png') no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+/* Appliquez des styles spécifiques aux petits écrans */
+@media screen and (max-width: 480px) {
+  .container-form {
+    max-width: 275px;
+  }
+  
+  .num {
+    width: 40px;
+    height: 50px;
+    font-size: 1.5rem;
+  }
+}

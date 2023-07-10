@@ -19,6 +19,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
+            "allowedCommonJsDependencies": ["lodash"],
             "assets": [
               {
                 "glob": "**/*",
@@ -37,7 +38,13 @@
               "./node_modules/@fortawesome/fontawesome-free/css/all.min.css"
             ],
             "scripts": [
-              "node_modules/@fortawesome/fontawesome-free/js/all.min.js"
+              "node_modules/@fortawesome/fontawesome-free/js/all.min.js",
+              "./node_modules/path/path.js",
+              "node_modules/path-browserify/index.js",
+              "node_modules/crypto-browserify/index.js",
+              "node_modules/stream-browserify/index.js",
+              "node_modules/path-browserify/index.js",
+              "node_modules/hammerjs/hammer.min.js"
             ]
           },
           "configurations": {

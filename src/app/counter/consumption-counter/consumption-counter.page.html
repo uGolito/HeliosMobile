@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-title class="ion-text-center">
+      <img src="/assets/images/logo helios blanc 2.png" alt="">
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" *ngIf="showBody">
+    
+  <input type="file" (change)="fileChangeEvent($event)" />
+
+<image-cropper
+    [imageChangedEvent]="imageChangedEvent"
+    [maintainAspectRatio]="true"
+    [aspectRatio]="6 / 1.5"
+    [autoCrop]=false
+    format="png"
+    [cropper]="cropper"
+    (imageCropped)="imageCropped($event)"
+    (imageLoaded)="imageLoaded($event)"
+    (cropperReady)="cropperReady()"
+    (loadImageFailed)="loadImageFailed()"
+></image-cropper>
+
+<ion-button expand="block" shape="round" size="medium" (click)="crop()">CROP THE PHOTO !!</ion-button>
+
+<img [src]="croppedImage" />
+
+  <ion-button expand="block" shape="round" size="medium" (click)="captureImage()">Prendre une photo</ion-button>
+  
+
+  <!-- <ion-button  expand="block" shape="round" size="medium" (click)="captureImage()">Prendre une photo</ion-button> -->
+  <ion-button  expand="block" shape="round" size="medium" (click)="recognizeCropped()">Traduire l'image</ion-button>
+  <div class="container">
+    <form action="">
+      <div class="container-form">
+        <input type="tel" inputmode="numeric" class="num" id="code1" [(ngModel)]="index[0]" maxlength="1" (ngModelChange)="addNumValue($event, 0)" (focus)="maFonction2(0)" (keyup)="maFonction(2)" required [ngModelOptions]="{standalone: true}">
+        <input type="tel" inputmode="numeric" class="num" id="code2" [(ngModel)]="index[1]" maxlength="1" (ngModelChange)="addNumValue($event, 1)" (focus)="maFonction2(1)" (keyup)="maFonction(3)" required [ngModelOptions]="{standalone: true}">
+        <input type="tel" inputmode="numeric" class="num" id="code3" [(ngModel)]="index[2]" maxlength="1" (ngModelChange)="addNumValue($event, 2)" (focus)="maFonction2(2)" (keyup)="maFonction(4)" required [ngModelOptions]="{standalone: true}">
+        <input type="tel" inputmode="numeric" class="num" id="code4" [(ngModel)]="index[3]" maxlength="1" (ngModelChange)="addNumValue($event, 3)" (focus)="maFonction2(3)" (keyup)="maFonction(5)" required [ngModelOptions]="{standalone: true}">
+        <input type="tel" inputmode="numeric" class="num" id="code5" [(ngModel)]="index[4]" maxlength="1" (ngModelChange)="addNumValue($event, 4)" (focus)="maFonction2(4)" (keyup)="maFonction(6)" required [ngModelOptions]="{standalone: true}">
+        <input type="tel" inputmode="numeric" class="num" id="code6" [(ngModel)]="index[5]" maxlength="1" (ngModelChange)="addNumValue($event, 5)" (focus)="maFonction2(5)" (keyup)="maFonction(7)" required [ngModelOptions]="{standalone: true}">
+        <input type="tel" inputmode="numeric" class="num num2" id="code7" [(ngModel)]="index[6]" maxlength="1" (ngModelChange)="addNum2Value($event, 6)" (focus)="maFonction2(6)" (keyup)="maFonction(8)" required [ngModelOptions]="{standalone: true}">
+        <input type="tel" inputmode="numeric" class="num num2" id="code8" [(ngModel)]="index[7]" maxlength="1" (ngModelChange)="addNum2Value($event, 7)" (focus)="maFonction2(7)" (keyup)="maFonction(9)" required [ngModelOptions]="{standalone: true}">
+        <input type="tel" inputmode="numeric" class="num num2" id="code9" [(ngModel)]="index[8]" maxlength="1" (ngModelChange)="addNum2Value($event, 8)" (focus)="maFonction2(8)" required [ngModelOptions]="{standalone: true}">
+      </div>  
+    </form>
+    <ion-button expand="block" shape="round" size="large" (click)="getJoinedValues()">Confirmer</ion-button> 
+    <div>{{ joinedValues }}</div>  
+  </div>
+</ion-content>

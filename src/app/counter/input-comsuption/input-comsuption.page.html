@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-title class="ion-text-center">
+      Helios Control Lite
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="container">
+    <form action="">
+      <div class="container-form">
+        <input type="number" inputmode="numeric" class="num" id="code1" [(ngModel)]="index[0]" maxlength="1" (ngModelChange)="addNumValue($event)" (focus)="maFonction2(0)" (keyup)="maFonction(2)" required [ngModelOptions]="{standalone: true}">
+        <input type="number" inputmode="numeric" class="num" id="code2" [(ngModel)]="index[1]" maxlength="1" (ngModelChange)="addNumValue($event)" (focus)="maFonction2(1)" (keyup)="maFonction(3)" required [ngModelOptions]="{standalone: true}">
+        <input type="number" inputmode="numeric" class="num" id="code3" [(ngModel)]="index[2]" maxlength="1" (ngModelChange)="addNumValue($event)" (focus)="maFonction2(2)" (keyup)="maFonction(4)" required [ngModelOptions]="{standalone: true}">
+        <input type="number" inputmode="numeric" class="num" id="code4" [(ngModel)]="index[3]" maxlength="1" (ngModelChange)="addNumValue($event)" (focus)="maFonction2(3)" (keyup)="maFonction(5)" required [ngModelOptions]="{standalone: true}">
+        <input type="number" inputmode="numeric" class="num" id="code5" [(ngModel)]="index[4]" maxlength="1" (ngModelChange)="addNumValue($event)" (focus)="maFonction2(4)" (keyup)="maFonction(6)" required [ngModelOptions]="{standalone: true}">
+        <input type="number" inputmode="numeric" class="num" id="code6" [(ngModel)]="index[5]" maxlength="1" (ngModelChange)="addNumValue($event)" (focus)="maFonction2(5)" (keyup)="maFonction(7)" required [ngModelOptions]="{standalone: true}">
+        <input type="number" inputmode="numeric" class="num num2" id="code7" [(ngModel)]="index[6]" maxlength="1" (ngModelChange)="addNum2Value($event)" (focus)="maFonction2(6)" (keyup)="maFonction(8)" required [ngModelOptions]="{standalone: true}">
+        <input type="number" inputmode="numeric" class="num num2" id="code8" [(ngModel)]="index[7]" maxlength="1" (ngModelChange)="addNum2Value($event)" (focus)="maFonction2(7)" (keyup)="maFonction(9)" required [ngModelOptions]="{standalone: true}">
+        <input type="number" inputmode="numeric" class="num num2" id="code9" [(ngModel)]="index[8]" maxlength="1" (ngModelChange)="addNum2Value($event)" (focus)="maFonction2(8)" required [ngModelOptions]="{standalone: true}">
+      </div>    
+    </form>
+    <ion-button color="success" expand="block" shape="round" size="large" (click)="getJoinedValues()">Confirm</ion-button> 
+    <div>{{ joinedValues }}</div>
+    <ion-button color="danger" expand="block" shape="round" size="large">Envoyer</ion-button>
+    <ion-button color="danger" expand="block" shape="round" size="large" (click)="navigation('consumption-counter')">Annuler</ion-button>
+  </div>
+</ion-content>
+
+

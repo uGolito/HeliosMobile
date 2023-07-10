@@ -16,12 +16,21 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
+    "allowSyntheticDefaultImports": true,
     "target": "es2015",
     "module": "es2020",
     "lib": [
       "es2018", 
       "dom"
     ],
+    "paths": {
+      "crypto": ["../node_modules/crypto-browserify"],
+      "stream": ["../node_modules/stream-browserify"],
+      "assert": ["../node_modules/assert"],
+      "http": ["../node_modules/stream-http"],
+      "https": ["../node_modules/https-browserify"],
+      "os": ["../node_modules/os-browserify"],
+    },
     "useDefineForClassFields": false
   },
   "angularCompilerOptions": {

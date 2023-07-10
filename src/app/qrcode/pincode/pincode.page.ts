@@ -33,7 +33,8 @@ export class PincodePage implements OnInit {
         this.dataService.buildingDetails.next(response['message']);
         this.myResponse = response['message'].zone;
         this.socketService.zoneSubscribe([this.myResponse._id]);
-        this.route.navigate(['/thermostat']);
+        //this.route.navigate(['/thermostat']);
+        this.route.navigate(['consumption-counter']);
       }
     })    
   }
