@@ -5,7 +5,9 @@
     </ion-title>
   </ion-toolbar>
 </ion-header>
-
+<div [class.overlay-open]="overlayOpen">
+  <!-- your content here -->
+</div>
 <ion-content class="ion-padding" *ngIf="showBody">
     
   <input type="file" (change)="fileChangeEvent($event)" />
@@ -21,11 +23,13 @@
     (cropperReady)="cropperReady()"
     (loadImageFailed)="loadImageFailed()"
 ></image-cropper>
+
 <ion-button expand="block" shape="round" size="medium" (click)="crop()">CROP THE PHOTO</ion-button>
 
 <img [src]="croppedImage" />
 
-  <ion-button expand="block" shape="round" size="medium" >Prendre une photo</ion-button>
+  <ion-button expand="block" shape="round" size="medium" (click)="captureImage()">Prendre une photo</ion-button>
+  
 
   <!-- <ion-button  expand="block" shape="round" size="medium" (click)="captureImage()">Prendre une photo</ion-button> -->
   <ion-button  expand="block" shape="round" size="medium" (click)="recognizeCropped()">Traduire l'image</ion-button>

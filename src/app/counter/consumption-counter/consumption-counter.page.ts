@@ -26,13 +26,7 @@ export class ConsumptionCounterPage {
   image: any;
   showBody = true;
   //showCropper = false;
-
-  // cropper = {
-  //   x1: 100,
-  //   y1: 100,
-  //   x2: 200,
-  //   y2: 200
-  // }
+  
 
   imageChangedEvent: any = '';
   croppedImage: any = '';
@@ -47,12 +41,12 @@ export class ConsumptionCounterPage {
   async takePhoto() {
     const image = await Camera.getPhoto({
       quality: 90,
-      allowEditing: true,
+      allowEditing: false,
       resultType: CameraResultType.DataUrl,
       source: CameraSource.Camera,
     });
-    console.log(image);
-    this.image = image.dataUrl;
+    
+    this.imageChangedEvent = image.dataUrl;
   }
   
   //async loadWorker() {
@@ -204,6 +198,7 @@ export class ConsumptionCounterPage {
   imageLoaded(image: LoadedImage) {
       // show cropper
   }
+  
 
   cropperReady() {
       // cropper ready
@@ -238,19 +233,21 @@ export class ConsumptionCounterPage {
   }
 
   base64Image: string | undefined;
+  overlayOpen = false;
 
-  // async captureImage() {
-  //   this.showBody = false;
-  //   // Add code to show overlay or preview
-  //   // For example, you can create an HTML element to display the overlay
-  //   const overlay = document.createElement('div');
-  //   overlay.style.position = 'absolute';
-  //   overlay.style.top = '0';
-  //   overlay.style.left = '0';
-  //   overlay.style.width = '100%';
-  //   overlay.style.height = '100%';
-  //   overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-  //   document.body.appendChild(overlay);
+  async captureImage() {
+    
+     // Add code to show overlay or preview
+     // For example, you can create an HTML element to display the overlay
+     const overlay = document.createElement('div');
+     overlay.classList.add('overlay-open')
+     overlay.style.position = 'absolute';
+     overlay.style.top = '5%';
+     overlay.style.left = '0';
+     overlay.style.width = '100%';
+     overlay.style.height = '45%';
+     overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+     document.body.appendChild(overlay);
 
   //   // Create a cropping rectangle overlay
   //   const cropperElement = document.createElement('div');
@@ -264,17 +261,19 @@ export class ConsumptionCounterPage {
   //   cropperElement.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
   //   overlay.appendChild(cropperElement);
   
-  //   // Add a button to the overlay
-  //   const captureButton = document.createElement('button');
-  //   captureButton.innerText = 'Capture';
-  //   captureButton.style.position = 'absolute';
-  //   captureButton.style.bottom = '20px';
-  //   captureButton.style.left = '50%';
-  //   captureButton.style.transform = 'translateX(-50%)';
-  //   overlay.appendChild(captureButton);
+     // Add a button to the overlay
+     const captureButton = document.createElement('button');
+     captureButton.innerText = 'Capture';
+     captureButton.style.position = 'absolute';
+     captureButton.style.bottom = '20px';
+     captureButton.style.left = '50%';
+     captureButton.style.transform = 'translateX(-50%)';
+     overlay.appendChild(captureButton);
+
+     this.overlayOpen = true;
   
-  //   // Capture the image when the button is clicked
-  //   captureButton.addEventListener('click', async () => {
+     // Capture the image when the button is clicked
+    captureButton.addEventListener('click', async () => {
   //     // Capture the image
   //     // Get the position of the cropping rectangle
   //     const cropperPosition = cropperElement.getBoundingClientRect();
@@ -286,7 +285,16 @@ export class ConsumptionCounterPage {
   //       quality: 85
   //     });
   //     this.base64Image = 'data:image/jpeg;base64,' + imageData;
-  
+    const imageData: any = await this.cameraPreview.takePicture({
+             width: 800,
+             height: 600,
+             quality: 85
+           });
+
+        this.imageChangedEvent = 'data:image/jpeg;base64,' + imageData;
+
+    });
+    this.overlayOpen = false;
   //     // Remove the overlay
   //     document.body.removeChild(overlay);
 
@@ -321,7 +329,7 @@ export class ConsumptionCounterPage {
 
   //     this.showBody = true;
   //   });
-  // }
+  }
 }
 
 
