@@ -5,9 +5,7 @@
     </ion-title>
   </ion-toolbar>
 </ion-header>
-<div [class.overlay-open]="overlayOpen">
-  <!-- your content here -->
-</div>
+
 <ion-content class="ion-padding" *ngIf="showBody">
     
   <input type="file" (change)="fileChangeEvent($event)" />

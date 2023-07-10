@@ -59,7 +59,6 @@ export class ConsumptionCounterPage {
   //}
   async loadWorker() {
       this.worker = await createWorker();
-      await this.worker?.load();
       await this.worker?.loadLanguage('eng');
       await this.worker?.initialize('eng');
 
@@ -71,32 +70,32 @@ export class ConsumptionCounterPage {
       const result = await this.worker?.recognize(imageUrl);
       console.log(result);
       this.ocrResult = result?.data.text.replace(/\D/g, "");
-    const ocrDigits = this.ocrResult?.split('');
-    // Réinitialiser les tableaux des valeurs
-    this.numValues = [];
-    this.num2Values = [];
-    // Remplir les valeurs des numValues
-    if (ocrDigits && ocrDigits.length > 0) {
-      for (let i = 0; i < 6; i++) {
-        if (ocrDigits[i]) {
-          this.numValues.push(ocrDigits[i]);
-        } else {
-          this.numValues.push('0');
-          this.num2Values.push('0');
+      const ocrDigits = this.ocrResult?.split('');
+      // Réinitialiser les tableaux des valeurs
+      this.numValues = [];
+      this.num2Values = [];
+      // Remplir les valeurs des numValues
+      if (ocrDigits && ocrDigits.length > 0) {
+        for (let i = 0; i < 6; i++) {
+          if (ocrDigits[i]) {
+            this.numValues.push(ocrDigits[i]);
+          } else {
+            this.numValues.push('0');
+            this.num2Values.push('0');
+          }
         }
       }
-    }
-    // Remplir les valeurs des num2Values
-    if (ocrDigits && ocrDigits.length >= 6) {
-      for (let i = 6; i < 9; i++) {
-        if (ocrDigits[i]) {
-          this.num2Values.push(ocrDigits[i]);
-        } else {
-          this.num2Values.push('0');
+      // Remplir les valeurs des num2Values
+      if (ocrDigits && ocrDigits.length >= 6) {
+        for (let i = 6; i < 9; i++) {
+          if (ocrDigits[i]) {
+            this.num2Values.push(ocrDigits[i]);
+          } else {
+            this.num2Values.push('0');
+          }
         }
       }
-    }
-    // Mettre à jour les valeurs des index utilisées pour les bindings des inputs
+      // Mettre à jour les valeurs des index utilisées pour les bindings des inputs
       for (let i = 0; i < this.numValues.length; i++) {
         this.index[i] = this.numValues[i];
       }
@@ -199,7 +198,6 @@ export class ConsumptionCounterPage {
       // show cropper
   }
   
-
   cropperReady() {
       // cropper ready
   }
@@ -233,14 +231,14 @@ export class ConsumptionCounterPage {
   }
 
   base64Image: string | undefined;
-  overlayOpen = false;
+
 
   async captureImage() {
+    this.showBody = false;
     
      // Add code to show overlay or preview
      // For example, you can create an HTML element to display the overlay
      const overlay = document.createElement('div');
-     overlay.classList.add('overlay-open')
      overlay.style.position = 'absolute';
      overlay.style.top = '5%';
      overlay.style.left = '0';
@@ -270,7 +268,6 @@ export class ConsumptionCounterPage {
      captureButton.style.transform = 'translateX(-50%)';
      overlay.appendChild(captureButton);
 
-     this.overlayOpen = true;
   
      // Capture the image when the button is clicked
     captureButton.addEventListener('click', async () => {
@@ -278,25 +275,17 @@ export class ConsumptionCounterPage {
   //     // Get the position of the cropping rectangle
   //     const cropperPosition = cropperElement.getBoundingClientRect();
 
-  //     // Capture the image within the cropping rectangle
-  //     const imageData: any = await this.cameraPreview.takePicture({
-  //       width: 800,
-  //       height: 600,
-  //       quality: 85
-  //     });
-  //     this.base64Image = 'data:image/jpeg;base64,' + imageData;
-    const imageData: any = await this.cameraPreview.takePicture({
-             width: 800,
-             height: 600,
-             quality: 85
-           });
-
-        this.imageChangedEvent = 'data:image/jpeg;base64,' + imageData;
-
+       // Capture the image within the cropping rectangle
+      const imageData: any = await this.cameraPreview.takePicture({
+        width: 800,
+        height: 600,
+        quality: 85
+      });
+      this.imageChangedEvent = 'data:image/jpeg;base64,' + imageData;
     });
-    this.overlayOpen = false;
-  //     // Remove the overlay
-  //     document.body.removeChild(overlay);
+
+    // Remove the overlay
+    document.body.removeChild(overlay);
 
   //     // Convert base64 image to blob
   //     const fetchRes = await fetch(this.base64Image);
@@ -327,7 +316,7 @@ export class ConsumptionCounterPage {
 
   //     this.imageCropper?.crop();
 
-  //     this.showBody = true;
+       this.showBody = true;
   //   });
   }
 }
