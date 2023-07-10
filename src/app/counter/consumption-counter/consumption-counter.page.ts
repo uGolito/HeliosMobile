@@ -241,6 +241,7 @@ export class ConsumptionCounterPage {
 
   async captureImage() {
     this.showBody = false;
+    this.cameraActive = true;
     
      // Add code to show overlay or preview
      // For example, you can create an HTML element to display the overlay
@@ -287,17 +288,18 @@ export class ConsumptionCounterPage {
         height: 600,
         quality: 85
       });
-      this.base64Image = 'data:image/jpeg;base64,' + imageData;
+      this.imageChangedEvent = 'data:image/jpeg;base64,' + imageData;
 
            // Convert base64 image to blob
-       const fetchRes = await fetch(this.base64Image);
-       const blob = await fetchRes.blob();
+       //const fetchRes = await fetch(this.base64Image);
+       //const blob = await fetchRes.blob();
 
        // Convert blob to data URL
-       this.imageChangedEvent = blob;
+       //this.imageChangedEvent = blob;
 
 
       // Remove the overlay
+      this.cameraActive = false;
       this.showBody = true;
       document.body.removeChild(overlay);
     });
@@ -329,9 +331,7 @@ export class ConsumptionCounterPage {
 
   //     this.croppedImage = croppedEvent.blob;
 
-  //     this.imageCropper?.crop();
-
-       
+  //     this.imageCropper?.crop();       
   //   });
   }
 }
