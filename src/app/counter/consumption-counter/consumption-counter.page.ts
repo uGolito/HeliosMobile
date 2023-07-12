@@ -37,55 +37,18 @@ export class ConsumptionCounterPage {
     this.loadWorker();
    }
 
-  async takePhoto1() {
-    const image = await Camera.getPhoto({
-      quality: 90,
-      allowEditing: false,
-      resultType: CameraResultType.DataUrl,
-      source: CameraSource.Camera,
-    });
-    
-    this.image = image.dataUrl;
-    console.log(this.image);
-  }
-  
   async takePhoto() {
-    // Create overlay
-    const overlay = document.createElement('div');
-    overlay.style.position = 'absolute';
-    overlay.style.top = '0';
-    overlay.style.left = '0';
-    overlay.style.width = '100%';
-    overlay.style.height = '100%';
-    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-    
-    // Create hole for cropper
-    const hole = document.createElement('div');
-    hole.style.position = 'absolute';
-    hole.style.top = `${this.cropperPositions.y1}px`;
-    hole.style.left = `${this.cropperPositions.x1}px`;
-    hole.style.width = `${this.cropperPositions.x2 - this.cropperPositions.x1}px`;
-    hole.style.height = `${this.cropperPositions.y2 - this.cropperPositions.y1}px`;
-    hole.style.backgroundColor = 'transparent';
-    
-    overlay.appendChild(hole);
-    document.body.appendChild(overlay);
-  
-    // Take photo
     const image = await Camera.getPhoto({
       quality: 90,
       allowEditing: false,
       resultType: CameraResultType.DataUrl,
       source: CameraSource.Camera,
     });
-  
+    
     this.image = image.dataUrl;
-  
-    // Remove overlay
-    document.body.removeChild(overlay);
-  
     console.log(this.image);
   }
+  
   async loadWorker() {
       this.worker = await createWorker();
       await this.worker?.loadLanguage('eng');
@@ -281,13 +244,14 @@ export class ConsumptionCounterPage {
     
     // Add code to show overlay or preview
     // Create overlay
-    const overlay = document.createElement('div');
-    overlay.style.position = 'absolute';
-    overlay.style.top = '0';
-    overlay.style.left = '0';
-    overlay.style.width = '100%';
-    overlay.style.height = '100%';
-    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+    // Create overlay
+const overlay = document.createElement('div');
+overlay.style.position = 'absolute';
+overlay.style.top = '0';
+overlay.style.left = '0';
+overlay.style.width = '100%';
+overlay.style.height = '100%';
+overlay.style.background = `radial-gradient(circle at ${this.cropperPositions.x1}px ${this.cropperPositions.y1}px, transparent, rgba(0, 0, 0, 0.7))`;
     
     // Create hole for cropper
     const hole = document.createElement('div');
@@ -335,7 +299,11 @@ export class ConsumptionCounterPage {
 
       // Remove the overlay
       document.body.removeChild(overlay);
+
+      this.cameraActive = false;
+      this.cameraPreview.stopCamera();
     });
+
 
   //     // Convert base64 image to blob
   //     const fetchRes = await fetch(this.base64Image);
