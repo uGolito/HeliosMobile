@@ -279,28 +279,27 @@ export class ConsumptionCounterPage {
     this.showBody = false;
     this.cameraActive = true;
     
-     // Add code to show overlay or preview
-     // For example, you can create an HTML element to display the overlay
-     const overlay = document.createElement('div');
-     overlay.style.position = 'absolute';
-     overlay.style.top = '5%';
-     overlay.style.left = '0';
-     overlay.style.width = '100%';
-     overlay.style.height = '45%';
-     overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-     document.body.appendChild(overlay);
-
-  //   // Create a cropping rectangle overlay
-  //   const cropperElement = document.createElement('div');
-  //   cropperElement.style.position = 'absolute';
-  //   cropperElement.style.top = '50%';
-  //   cropperElement.style.left = '50%';
-  //   cropperElement.style.transform = 'translate(-50%, -50%)';
-  //   cropperElement.style.width = '80%';
-  //   cropperElement.style.height = '50%';
-  //   cropperElement.style.border = '2px dashed white';
-  //   cropperElement.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
-  //   overlay.appendChild(cropperElement);
+    // Add code to show overlay or preview
+    // Create overlay
+    const overlay = document.createElement('div');
+    overlay.style.position = 'absolute';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+    
+    // Create hole for cropper
+    const hole = document.createElement('div');
+    hole.style.position = 'absolute';
+    hole.style.top = `${this.cropperPositions.y1}px`;
+    hole.style.left = `${this.cropperPositions.x1}px`;
+    hole.style.width = `${this.cropperPositions.x2 - this.cropperPositions.x1}px`;
+    hole.style.height = `${this.cropperPositions.y2 - this.cropperPositions.y1}px`;
+    hole.style.backgroundColor = 'transparent';
+    
+    overlay.appendChild(hole);
+    document.body.appendChild(overlay);
   
      // Add a button to the overlay
      const captureButton = document.createElement('button');
@@ -319,12 +318,12 @@ export class ConsumptionCounterPage {
   //     const cropperPosition = cropperElement.getBoundingClientRect();
 
        // Capture the image within the cropping rectangle
-      const imageData: any = await this.cameraPreview.takePicture({
+      const image: any = await this.cameraPreview.takePicture({
         width: 800,
         height: 600,
         quality: 85
       });
-      this.imageChangedEvent = 'data:image/jpeg;base64,' + imageData;
+      this.image = 'data:image/jpeg;base64,' + image;
 
            // Convert base64 image to blob
        //const fetchRes = await fetch(this.base64Image);
@@ -335,8 +334,6 @@ export class ConsumptionCounterPage {
 
 
       // Remove the overlay
-      this.cameraActive = false;
-      this.showBody = true;
       document.body.removeChild(overlay);
     });
 
