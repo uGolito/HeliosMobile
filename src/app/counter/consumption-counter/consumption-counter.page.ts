@@ -33,8 +33,7 @@ export class ConsumptionCounterPage {
 
   cameraActive: boolean = false;
 
-  constructor(public navCtrl: NavController, private route: Router, 
-              private sanitizer: DomSanitizer, private cameraPreview: CameraPreview) {
+  constructor(public navCtrl: NavController, private route: Router, private sanitizer: DomSanitizer, private cameraPreview: CameraPreview) {
     this.loadWorker();
    }
 
@@ -46,7 +45,7 @@ export class ConsumptionCounterPage {
       source: CameraSource.Camera,
     });
     
-    this.imageChangedEvent = image.dataUrl;
+    this.image = image.dataUrl;
   }
   
   //async loadWorker() {

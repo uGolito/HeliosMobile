@@ -9,7 +9,7 @@
 <ion-content class="ion-padding" *ngIf="showBody">
     
   <input type="file" (change)="fileChangeEvent($event)" />
-  <img [src]="image" alt="">
+  <img [src]="image" />
 
 <image-cropper
     [imageChangedEvent]="imageChangedEvent"
