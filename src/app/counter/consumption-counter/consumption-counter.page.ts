@@ -43,8 +43,6 @@ export class ConsumptionCounterPage {
       allowEditing: false,
       resultType: CameraResultType.DataUrl,
       source: CameraSource.Camera,
-      width: 500,
-      height: 200
     });
     
     this.image = image.dataUrl;
