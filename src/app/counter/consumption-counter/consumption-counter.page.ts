@@ -37,7 +37,7 @@ export class ConsumptionCounterPage {
     this.loadWorker();
    }
 
-  async takePhoto() {
+  async takePhoto1() {
     const image = await Camera.getPhoto({
       quality: 90,
       allowEditing: false,
@@ -49,14 +49,43 @@ export class ConsumptionCounterPage {
     console.log(this.image);
   }
   
-  //async loadWorker() {
-  //  this.worker = await createWorker();
+  async takePhoto() {
+    // Create overlay
+    const overlay = document.createElement('div');
+    overlay.style.position = 'absolute';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
     
-  //  await this.worker?.loadLanguage('fra');
-  //  await this.worker?.initialize('fra');
-
-  //  this.workerReady = true;
-  //}
+    // Create hole for cropper
+    const hole = document.createElement('div');
+    hole.style.position = 'absolute';
+    hole.style.top = `${this.cropperPositions.y1}px`;
+    hole.style.left = `${this.cropperPositions.x1}px`;
+    hole.style.width = `${this.cropperPositions.x2 - this.cropperPositions.x1}px`;
+    hole.style.height = `${this.cropperPositions.y2 - this.cropperPositions.y1}px`;
+    hole.style.backgroundColor = 'transparent';
+    
+    overlay.appendChild(hole);
+    document.body.appendChild(overlay);
+  
+    // Take photo
+    const image = await Camera.getPhoto({
+      quality: 90,
+      allowEditing: false,
+      resultType: CameraResultType.DataUrl,
+      source: CameraSource.Camera,
+    });
+  
+    this.image = image.dataUrl;
+  
+    // Remove overlay
+    document.body.removeChild(overlay);
+  
+    console.log(this.image);
+  }
   async loadWorker() {
       this.worker = await createWorker();
       await this.worker?.loadLanguage('eng');
@@ -146,11 +175,11 @@ export class ConsumptionCounterPage {
     this.navCtrl.navigateRoot('/input-comsuption');
   }
 
-  cropper = {
+  cropperPositions: CropperPosition = {
     x1: 100,
-    y1: 100,
-    x2: 200,
-    y2: 200
+    y1: 300,
+    x2: 550,
+    y2: 350
   }
 
   numValues: string[] = [];
@@ -201,7 +230,14 @@ export class ConsumptionCounterPage {
   }
 
   imageLoaded(image: LoadedImage) {
-      // show cropper
+      setTimeout(() => {
+        this.cropperPositions = {
+          x1: 100,
+          y1: 300,
+          x2: 550,
+          y2: 350
+        };
+      },2);
   }
   
   cropperReady() {
