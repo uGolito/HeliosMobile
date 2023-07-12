@@ -8,11 +8,11 @@
 
 <ion-content class="ion-padding" *ngIf="showBody">
     
-  <input type="file" (change)="fileChangeEvent($event)" />
-  <img [src]="image" />
+  <!--<input type="file" (change)="fileChangeEvent($event)" />-->
+  <img [src]="image"/>
 
 <image-cropper
-    [imageChangedEvent]="imageChangedEvent"
+    [imageURL]="image"
     [maintainAspectRatio]="true"
     [aspectRatio]="6 / 1.5"
     [autoCrop]=false
