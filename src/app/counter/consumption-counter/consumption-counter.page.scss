@@ -2,6 +2,55 @@ ion-content {
   --background: #333;
 }
 
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 10;
+}
+
+.transparent-rectangle {
+  position: absolute;
+  background-color: transparent;
+  border: 1px solid #fff;
+}
+
+.cameraPreview {
+  display: flex;
+  width: 100%;
+  height: 100%; 
+  position: absolute;
+}
+
+#capture {
+  position: absolute;
+  bottom : 30px;
+  left: calc(50% - 175px);
+  width: 50px;
+  height: 50px;
+  z-index: 11;
+}
+
+#close {
+  position: absolute;
+  bottom : 30px;
+  right: calc(50% + 125px);
+  width: 50px;
+  height: 50px;
+  z-index: 11;
+}
+
+#capture::part(native) {
+  border-radius: 30px;
+}
+
+#close::part(native) {
+  border-radius: 30px;
+}
+
 ion-button {
   --border-radius: 0.5rem;
   --background: #444;

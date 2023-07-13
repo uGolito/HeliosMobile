@@ -6,8 +6,11 @@ import * as Tesseract from 'tesseract.js';
 import { createWorker } from 'tesseract.js';
 import { CropperPosition, LoadedImage, ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 import { DomSanitizer } from '@angular/platform-browser';
-import { CameraPreview, CameraPreviewPictureOptions, CameraPreviewOptions, CameraPreviewDimensions } from '@awesome-cordova-plugins/camera-preview/ngx';
+//import { CameraPreview, CameraPreviewPictureOptions, CameraPreviewOptions, CameraPreviewDimensions } from '@awesome-cordova-plugins/camera-preview/ngx';
+import { CameraPreview, CameraPreviewOptions, CameraPreviewPictureOptions } from '@capacitor-community/camera-preview';
 import 'hammerjs';
+
+import '@capacitor-community/camera-preview';
 
 
 @Component({
@@ -32,22 +35,32 @@ export class ConsumptionCounterPage {
   croppedImage: any = '';
 
   cameraActive: boolean = false;
-
-  constructor(public navCtrl: NavController, private route: Router, private sanitizer: DomSanitizer, private cameraPreview: CameraPreview) {
+  //, private cameraPreview: CameraPreview
+  constructor(public navCtrl: NavController, private route: Router, private sanitizer: DomSanitizer) {
     this.loadWorker();
-   }
-
-  async takePhoto() {
-    const image = await Camera.getPhoto({
-      quality: 90,
-      allowEditing: false,
-      resultType: CameraResultType.DataUrl,
-      source: CameraSource.Camera,
-    });
-    
-    this.image = image.dataUrl;
-    console.log(this.image);
   }
+
+  openCamera() {
+    const CameraPreviewOptions: CameraPreviewOptions = {
+      position: 'rear',
+      parent: 'cameraPreview',
+      className: 'camera-preview'
+    };
+    CameraPreview.start(CameraPreviewOptions);
+    this.cameraActive = true;
+  }
+
+  // async takePhoto() {
+  //   const image = await Camera.getPhoto({
+  //     quality: 90,
+  //     allowEditing: false,
+  //     resultType: CameraResultType.DataUrl,
+  //     source: CameraSource.Camera,
+  //   });
+    
+  //   this.image = image.dataUrl;
+  //   console.log(this.image);
+  // }
   
   async loadWorker() {
       this.worker = await createWorker();
@@ -145,6 +158,15 @@ export class ConsumptionCounterPage {
     y2: 350
   }
 
+  getOverlayStyles() {
+    return {
+      'top': this.cropperPositions.y1 + 'px',
+      'left': this.cropperPositions.x1 + 'px',
+      'width': (this.cropperPositions.x2 - this.cropperPositions.x1) + 'px',
+      'height': (this.cropperPositions.y2 - this.cropperPositions.y1) + 'px'
+    };
+  }
+
   numValues: string[] = [];
   num2Values: string[] = [];
   joinedValues: any;
@@ -168,7 +190,7 @@ export class ConsumptionCounterPage {
   }
 
   ngOnInit() {
-    this.startCameraPreview();
+    //this.startCameraPreview();
   }
 
   navigation(url : String) {
@@ -217,123 +239,107 @@ export class ConsumptionCounterPage {
     }
   }
 
-  startCameraPreview() {
-    const cameraPreviewOpts: CameraPreviewOptions = {
-      x: 0,
-      y: 0,
-      width: window.screen.width,
-      height: window.screen.height,
-      camera: 'rear',
-      toBack: true,
-      tapPhoto: false,
-      tapFocus: false,
-      previewDrag: false,
-      storeToFile: false,
-      disableExifHeaderStripping: false,
-    };
-    this.cameraPreview.startCamera(cameraPreviewOpts);
-    this.cameraActive = true;
-  }
+  // startCameraPreview() {
+  //   const cameraPreviewOpts: CameraPreviewOptions = {
+  //     x: 0,
+  //     y: 0,
+  //     width: window.screen.width,
+  //     height: window.screen.height,
+  //     camera: 'rear',
+  //     toBack: true,
+  //     tapPhoto: false,
+  //     tapFocus: false,
+  //     previewDrag: false,
+  //     storeToFile: false,
+  //     disableExifHeaderStripping: false,
+  //   };
+  //   this.cameraPreview.startCamera(cameraPreviewOpts);
+  //   this.cameraActive = true;
+  // }
 
   base64Image: string | undefined;
 
 
+//   async captureImage() {
+//     this.showBody = false;
+//     this.cameraActive = true;
+    
+//     // Add code to show overlay or preview
+//     // Create overlay
+//     // Create overlay
+// const overlay = document.createElement('div');
+// overlay.style.position = 'absolute';
+// overlay.style.top = '0';
+// overlay.style.left = '0';
+// overlay.style.width = '100%';
+// overlay.style.height = '100%';
+// overlay.style.background = `radial-gradient(circle at ${this.cropperPositions.x1}px ${this.cropperPositions.y1}px, transparent, rgba(0, 0, 0, 0.7))`;
+    
+//     // Create hole for cropper
+//     const hole = document.createElement('div');
+//     hole.style.position = 'absolute';
+//     hole.style.top = `${this.cropperPositions.y1}px`;
+//     hole.style.left = `${this.cropperPositions.x1}px`;
+//     hole.style.width = `${this.cropperPositions.x2 - this.cropperPositions.x1}px`;
+//     hole.style.height = `${this.cropperPositions.y2 - this.cropperPositions.y1}px`;
+//     hole.style.backgroundColor = 'transparent';
+    
+//     overlay.appendChild(hole);
+//     document.body.appendChild(overlay);
+  
+//      // Add a button to the overlay
+//      const captureButton = document.createElement('button');
+//      captureButton.innerText = 'Capture';
+//      captureButton.style.position = 'absolute';
+//      captureButton.style.bottom = '20px';
+//      captureButton.style.left = '50%';
+//      captureButton.style.transform = 'translateX(-50%)';
+//      overlay.appendChild(captureButton);
+
+  
+//      // Capture the image when the button is clicked
+//     captureButton.addEventListener('click', async () => {
+//   //     // Capture the image
+//   //     // Get the position of the cropping rectangle
+//   //     const cropperPosition = cropperElement.getBoundingClientRect();
+
+//        // Capture the image within the cropping rectangle
+//       const image: any = await this.cameraPreview.takePicture({
+//         width: 800,
+//         height: 600,
+//         quality: 85
+//       });
+//       this.image = 'data:image/jpeg;base64,' + image;
+
+//            // Convert base64 image to blob
+//        //const fetchRes = await fetch(this.base64Image);
+//        //const blob = await fetchRes.blob();
+
+//        // Convert blob to data URL
+//        //this.imageChangedEvent = blob;
+
+
+//       // Remove the overlay
+//       document.body.removeChild(overlay);
+
+//       this.cameraActive = false;
+//       this.cameraPreview.stopCamera();
+//     });
+//  }
+
+  async stopCamera() {
+    await CameraPreview.stop();
+    this.cameraActive = false;
+  }
+
   async captureImage() {
-    this.showBody = false;
-    this.cameraActive = true;
-    
-    // Add code to show overlay or preview
-    // Create overlay
-    // Create overlay
-const overlay = document.createElement('div');
-overlay.style.position = 'absolute';
-overlay.style.top = '0';
-overlay.style.left = '0';
-overlay.style.width = '100%';
-overlay.style.height = '100%';
-overlay.style.background = `radial-gradient(circle at ${this.cropperPositions.x1}px ${this.cropperPositions.y1}px, transparent, rgba(0, 0, 0, 0.7))`;
-    
-    // Create hole for cropper
-    const hole = document.createElement('div');
-    hole.style.position = 'absolute';
-    hole.style.top = `${this.cropperPositions.y1}px`;
-    hole.style.left = `${this.cropperPositions.x1}px`;
-    hole.style.width = `${this.cropperPositions.x2 - this.cropperPositions.x1}px`;
-    hole.style.height = `${this.cropperPositions.y2 - this.cropperPositions.y1}px`;
-    hole.style.backgroundColor = 'transparent';
-    
-    overlay.appendChild(hole);
-    document.body.appendChild(overlay);
-  
-     // Add a button to the overlay
-     const captureButton = document.createElement('button');
-     captureButton.innerText = 'Capture';
-     captureButton.style.position = 'absolute';
-     captureButton.style.bottom = '20px';
-     captureButton.style.left = '50%';
-     captureButton.style.transform = 'translateX(-50%)';
-     overlay.appendChild(captureButton);
+    const cameraPreviewPictureOptions: CameraPreviewPictureOptions = {
+      quality: 90,
+    };
 
-  
-     // Capture the image when the button is clicked
-    captureButton.addEventListener('click', async () => {
-  //     // Capture the image
-  //     // Get the position of the cropping rectangle
-  //     const cropperPosition = cropperElement.getBoundingClientRect();
-
-       // Capture the image within the cropping rectangle
-      const image: any = await this.cameraPreview.takePicture({
-        width: 800,
-        height: 600,
-        quality: 85
-      });
-      this.image = 'data:image/jpeg;base64,' + image;
-
-           // Convert base64 image to blob
-       //const fetchRes = await fetch(this.base64Image);
-       //const blob = await fetchRes.blob();
-
-       // Convert blob to data URL
-       //this.imageChangedEvent = blob;
-
-
-      // Remove the overlay
-      document.body.removeChild(overlay);
-
-      this.cameraActive = false;
-      this.cameraPreview.stopCamera();
-    });
-
-
-  //     // Convert base64 image to blob
-  //     const fetchRes = await fetch(this.base64Image);
-  //     const blob = await fetchRes.blob();
-
-  //     // Convert blob to data URL
-  //     const croppedImageUrl = URL.createObjectURL(blob);
-
-  //     // Update the croppedImage with the data URL
-  //     this.croppedImage = croppedImageUrl;
-      
-  //     // Crop the image based on the cropper position
-  //     const croppedEvent: ImageCroppedEvent = {
-  //       objectUrl: croppedImageUrl,
-  //       width: 400,
-  //       height: 200,
-  //       cropperPosition : {
-  //         x1: 200,
-  //         y1: 200,
-  //         x2: 400,
-  //         y2: 200
-  //       },
-  //       imagePosition: this.cropper
-  //     };
-  //     this.imageCropped(croppedEvent);
-
-  //     this.croppedImage = croppedEvent.blob;
-
-  //     this.imageCropper?.crop();       
-  //   });
+    const result = await CameraPreview.capture(cameraPreviewPictureOptions);
+    this.image = `data:image/jpeg;base64,${result.value}`;
+    this.stopCamera();
   }
 }
 
