@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
 import { CameraResultType, CameraSource, Camera } from '@capacitor/camera';
 import { NavController } from '@ionic/angular';
@@ -36,18 +36,29 @@ export class ConsumptionCounterPage {
 
   cameraActive: boolean = false;
   //, private cameraPreview: CameraPreview
-  constructor(public navCtrl: NavController, private route: Router, private sanitizer: DomSanitizer) {
-    this.loadWorker();
+  constructor(public navCtrl: NavController, private route: Router, private sanitizer: DomSanitizer, private el : ElementRef, private renderer: Renderer2) {
+    //this.loadWorker();
   }
 
   openCamera() {
     const CameraPreviewOptions: CameraPreviewOptions = {
       position: 'rear',
       parent: 'cameraPreview',
-      className: 'camera-preview'
+      className: 'cameraPreview'
     };
     CameraPreview.start(CameraPreviewOptions);
+    const intervalId = setInterval(() => {
+      const element = this.el.nativeElement.querySelector('#video');
+      if (element) {
+        clearInterval(intervalId);
+        this.renderer.setStyle(element, 'height', '50%');
+        this.renderer.setStyle(element, 'top', '0');
+        this.renderer.setStyle(element, 'position', 'absolute');
+      }
+    }, 200);
+    
     this.cameraActive = true;
+    this.showBody = true;
   }
 
   // async takePhoto() {
@@ -330,6 +341,7 @@ export class ConsumptionCounterPage {
   async stopCamera() {
     await CameraPreview.stop();
     this.cameraActive = false;
+    this.showBody = true;
   }
 
   async captureImage() {
@@ -340,6 +352,7 @@ export class ConsumptionCounterPage {
     const result = await CameraPreview.capture(cameraPreviewPictureOptions);
     this.image = `data:image/jpeg;base64,${result.value}`;
     this.stopCamera();
+    this.showBody = true;
   }
 }
 
