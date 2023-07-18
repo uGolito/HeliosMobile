@@ -44,22 +44,22 @@ export class ConsumptionCounterPage {
     //this.loadWorker();
   }
 
-  async openCamera() {
+  openCamera() {
     const options: CameraPreviewOptions = {
       position: 'rear',
       parent: 'cameraPreview',
       className: 'cameraPreview'
     };
-    await CameraPreview.start(options);
-    const intervalId = setInterval(() => {
-      const element = this.el.nativeElement.querySelector('#video');
-      if (element) {
-        clearInterval(intervalId);
-        this.renderer.setStyle(element, 'height', '50%');
-        this.renderer.setStyle(element, 'top', '0');
-        this.renderer.setStyle(element, 'position', 'absolute');
-      }
-    }, 200);
+    CameraPreview.start(options);
+    // const intervalId = setInterval(() => {
+    //   const element = this.el.nativeElement.querySelector('#video');
+    //   if (element) {
+    //     clearInterval(intervalId);
+    //     this.renderer.setStyle(element, 'height', '60%');
+    //     this.renderer.setStyle(element, 'top', '0');
+    //     this.renderer.setStyle(element, 'position', 'absolute');
+    //   }
+    // }, 200);
     
     this.cameraActive = true;
     this.showBody = true;
@@ -205,7 +205,7 @@ export class ConsumptionCounterPage {
   }
 
   ngOnInit() {
-    this.startCameraPreview();
+    //this.startCameraPreview();
   }
 
   navigation(url : String) {
