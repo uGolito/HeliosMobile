@@ -48,7 +48,8 @@ export class ConsumptionCounterPage {
     const options: CameraPreviewOptions = {
       position: 'rear',
       parent: 'cameraPreview',
-      className: 'cameraPreview'
+      className: 'cameraPreview',
+      toBack: true
     };
     CameraPreview.start(options);
     // const intervalId = setInterval(() => {
