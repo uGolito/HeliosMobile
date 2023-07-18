@@ -205,7 +205,7 @@ export class ConsumptionCounterPage {
   }
 
   ngOnInit() {
-    //this.startCameraPreview();
+    this.startCameraPreview();
   }
 
   navigation(url : String) {
@@ -254,23 +254,15 @@ export class ConsumptionCounterPage {
     }
   }
 
-  // startCameraPreview() {
-  //   const cameraPreviewOpts: CameraPreviewOptions = {
-  //     x: 0,
-  //     y: 0,
-  //     width: window.screen.width,
-  //     height: window.screen.height,
-  //     camera: 'rear',
-  //     toBack: true,
-  //     tapPhoto: false,
-  //     tapFocus: false,
-  //     previewDrag: false,
-  //     storeToFile: false,
-  //     disableExifHeaderStripping: false,
-  //   };
-  //   this.cameraPreview.startCamera(cameraPreviewOpts);
-  //   this.cameraActive = true;
-  // }
+  startCameraPreview() {
+     const cameraPreviewOpts: CameraPreviewOptions = {
+      parent: 'cameraPreview',
+      className: 'cameraPreview',
+      position: 'rear'
+     };
+     CameraPreview.start(cameraPreviewOpts);
+     this.cameraActive = true;
+   }
 
   base64Image: string | undefined;
 
