@@ -8,7 +8,8 @@ import { ConsumptionCounterPageRoutingModule } from './consumption-counter-routi
 
 import { ConsumptionCounterPage } from './consumption-counter.page';
 import { ImageCropperModule } from 'ngx-image-cropper';
-import { CameraPreview } from '@awesome-cordova-plugins/camera-preview/ngx';
+//import { CameraPreview } from '@awesome-cordova-plugins/camera-preview/ngx';
+import { CameraPreview } from '@capacitor-community/camera-preview';
 
 
 @NgModule({
@@ -17,9 +18,9 @@ import { CameraPreview } from '@awesome-cordova-plugins/camera-preview/ngx';
     FormsModule,
     IonicModule,
     ConsumptionCounterPageRoutingModule,
-    ImageCropperModule
+    ImageCropperModule,
   ],
-  providers: [CameraPreview],
+  providers: [],
   declarations: [ConsumptionCounterPage]
 })
 export class ConsumptionCounterPageModule {}

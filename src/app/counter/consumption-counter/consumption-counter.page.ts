@@ -1,6 +1,5 @@
-import { Component, ViewChild, ElementRef, Renderer2 } from '@angular/core';
+import { Component, ViewChild, ElementRef, Renderer2} from '@angular/core';
 import { Router } from '@angular/router';
-import { CameraResultType, CameraSource, Camera } from '@capacitor/camera';
 import { NavController } from '@ionic/angular';
 import * as Tesseract from 'tesseract.js';
 import { createWorker } from 'tesseract.js';
@@ -9,6 +8,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 //import { CameraPreview, CameraPreviewPictureOptions, CameraPreviewOptions, CameraPreviewDimensions } from '@awesome-cordova-plugins/camera-preview/ngx';
 import { CameraPreview, CameraPreviewOptions, CameraPreviewPictureOptions } from '@capacitor-community/camera-preview';
 import 'hammerjs';
+
 
 import '@capacitor-community/camera-preview';
 
@@ -36,17 +36,21 @@ export class ConsumptionCounterPage {
 
   cameraActive: boolean = false;
   //, private cameraPreview: CameraPreview
-  constructor(public navCtrl: NavController, private route: Router, private sanitizer: DomSanitizer, private el : ElementRef, private renderer: Renderer2) {
+  constructor(public navCtrl: NavController, 
+              private route: Router, 
+              private sanitizer: DomSanitizer, 
+              private el : ElementRef, 
+              private renderer: Renderer2) {
     //this.loadWorker();
   }
 
-  openCamera() {
-    const CameraPreviewOptions: CameraPreviewOptions = {
+  async openCamera() {
+    const options: CameraPreviewOptions = {
       position: 'rear',
       parent: 'cameraPreview',
       className: 'cameraPreview'
     };
-    CameraPreview.start(CameraPreviewOptions);
+    await CameraPreview.start(options);
     const intervalId = setInterval(() => {
       const element = this.el.nativeElement.querySelector('#video');
       if (element) {
