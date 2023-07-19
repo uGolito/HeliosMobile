@@ -8,9 +8,16 @@
 
 <ion-content>   
 <!--<input type="file" (change)="fileChangeEvent($event)" />-->
-<div class="cameraPreview" id="cameraPreview" *ngIf="cameraActive">
+
+<div class="cameraPreview" id="cameraPreview">
   <div *ngIf="cameraActive">
     <img src="../../../assets/icon/favicon.png" class="image-overlay">
+    <div class="overlay" 
+      [style.left.px]="cropPosition.x1" 
+      [style.top.px]="cropPosition.y1" 
+      [style.width.px]="cropPosition.x2 - cropPosition.x1" 
+      [style.height.px]="cropPosition.y2 - cropPosition.y1">
+    </div>
 
     <ion-button (click)="stopCamera()" expand="block" id="close">
       <ion-icon name="close-circle" slot="icon-only"></ion-icon>
@@ -41,7 +48,6 @@
   </div>
 </div>
 <img [src]="image" *ngIf="image && !cameraActive"/>
-<ion-button *ngIf="!cameraActive" expand="block" shape="round" size="medium" (click)="openCamera()">Prendre une photo</ion-button>
 <image-cropper
           [imageURL]="image"
           [maintainAspectRatio]="true"
@@ -49,14 +55,16 @@
           [autoCrop]=false
           format="png"
 
-
+          [cropper]="cropPosition"
           (imageCropped)="imageCropped($event)"
           (imageLoaded)="imageLoaded($event)"
           (cropperReady)="cropperReady()"
           (loadImageFailed)="loadImageFailed()"
+          #imageCropper
       ></image-cropper>
-    
-      <ion-button expand="block" shape="round" size="medium" (click)="crop()">CROP THE PHOTO !!</ion-button>
+
+      <ion-button *ngIf="!cameraActive" expand="block" shape="round" size="medium" (click)="openCamera()">Prendre une photo</ion-button>
+      <!--<ion-button expand="block" shape="round" size="medium" (click)="crop()">CROP THE PHOTO !!</ion-button>-->
     
       <img [src]="croppedImage" />
 </ion-content>

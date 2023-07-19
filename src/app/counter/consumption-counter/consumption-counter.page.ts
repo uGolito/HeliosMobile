@@ -5,7 +5,6 @@ import * as Tesseract from 'tesseract.js';
 import { createWorker } from 'tesseract.js';
 import { CropperPosition, LoadedImage, ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 import { DomSanitizer } from '@angular/platform-browser';
-//import { CameraPreview, CameraPreviewPictureOptions, CameraPreviewOptions, CameraPreviewDimensions } from '@awesome-cordova-plugins/camera-preview/ngx';
 import { CameraPreview, CameraPreviewOptions, CameraPreviewPictureOptions } from '@capacitor-community/camera-preview';
 import 'hammerjs';
 
@@ -29,13 +28,12 @@ export class ConsumptionCounterPage {
   image: any;
   showBody = true;
   //showCropper = false;
+  cropPosition = {x1: 100, y1: 50, x2: 300, y2: 200};
   
-
   imageChangedEvent: any = '';
   croppedImage: any = '';
 
   cameraActive: boolean = false;
-  //, private cameraPreview: CameraPreview
   constructor(public navCtrl: NavController, 
               private route: Router, 
               private sanitizer: DomSanitizer, 
@@ -52,32 +50,11 @@ export class ConsumptionCounterPage {
       toBack: true
     };
     CameraPreview.start(options);
-    // const intervalId = setInterval(() => {
-    //   const element = this.el.nativeElement.querySelector('#video');
-    //   if (element) {
-    //     clearInterval(intervalId);
-    //     this.renderer.setStyle(element, 'height', '60%');
-    //     this.renderer.setStyle(element, 'top', '0');
-    //     this.renderer.setStyle(element, 'position', 'absolute');
-    //   }
-    // }, 200);
     
     this.cameraActive = true;
     this.showBody = true;
   }
 
-  // async takePhoto() {
-  //   const image = await Camera.getPhoto({
-  //     quality: 90,
-  //     allowEditing: false,
-  //     resultType: CameraResultType.DataUrl,
-  //     source: CameraSource.Camera,
-  //   });
-    
-  //   this.image = image.dataUrl;
-  //   console.log(this.image);
-  // }
-  
   async loadWorker() {
       this.worker = await createWorker();
       await this.worker?.loadLanguage('eng');
@@ -167,22 +144,6 @@ export class ConsumptionCounterPage {
     this.navCtrl.navigateRoot('/input-comsuption');
   }
 
-  cropperPositions: CropperPosition = {
-    x1: 50,
-    y1: 50,
-    x2: 50,
-    y2: 50
-  }
-
-  getOverlayStyles() {
-    return {
-      'top': this.cropperPositions.y1 + 'px',
-      'left': this.cropperPositions.x1 + 'px',
-      'width': (this.cropperPositions.x2 - this.cropperPositions.x1) + 'px',
-      'height': (this.cropperPositions.y2 - this.cropperPositions.y1) + 'px'
-    };
-  }
-
   numValues: string[] = [];
   num2Values: string[] = [];
   joinedValues: any;
@@ -231,14 +192,14 @@ export class ConsumptionCounterPage {
   }
 
   imageLoaded(image: LoadedImage) {
-      setTimeout(() => {
-        this.cropperPositions = {
-          x1: 100,
-          y1: 300,
-          x2: 550,
-          y2: 350
-        };
-      },2);
+    setTimeout(() => {
+      this.cropPosition = {
+        x1: 100,
+        y1: 50,
+        x2: 300,
+        y2: 200
+      };
+    },2);
   }
   
   cropperReady() {
@@ -265,76 +226,6 @@ export class ConsumptionCounterPage {
      this.cameraActive = true;
    }
 
-  base64Image: string | undefined;
-
-
-//   async captureImage() {
-//     this.showBody = false;
-//     this.cameraActive = true;
-    
-//     // Add code to show overlay or preview
-//     // Create overlay
-//     // Create overlay
-// const overlay = document.createElement('div');
-// overlay.style.position = 'absolute';
-// overlay.style.top = '0';
-// overlay.style.left = '0';
-// overlay.style.width = '100%';
-// overlay.style.height = '100%';
-// overlay.style.background = `radial-gradient(circle at ${this.cropperPositions.x1}px ${this.cropperPositions.y1}px, transparent, rgba(0, 0, 0, 0.7))`;
-    
-//     // Create hole for cropper
-//     const hole = document.createElement('div');
-//     hole.style.position = 'absolute';
-//     hole.style.top = `${this.cropperPositions.y1}px`;
-//     hole.style.left = `${this.cropperPositions.x1}px`;
-//     hole.style.width = `${this.cropperPositions.x2 - this.cropperPositions.x1}px`;
-//     hole.style.height = `${this.cropperPositions.y2 - this.cropperPositions.y1}px`;
-//     hole.style.backgroundColor = 'transparent';
-    
-//     overlay.appendChild(hole);
-//     document.body.appendChild(overlay);
-  
-//      // Add a button to the overlay
-//      const captureButton = document.createElement('button');
-//      captureButton.innerText = 'Capture';
-//      captureButton.style.position = 'absolute';
-//      captureButton.style.bottom = '20px';
-//      captureButton.style.left = '50%';
-//      captureButton.style.transform = 'translateX(-50%)';
-//      overlay.appendChild(captureButton);
-
-  
-//      // Capture the image when the button is clicked
-//     captureButton.addEventListener('click', async () => {
-//   //     // Capture the image
-//   //     // Get the position of the cropping rectangle
-//   //     const cropperPosition = cropperElement.getBoundingClientRect();
-
-//        // Capture the image within the cropping rectangle
-//       const image: any = await this.cameraPreview.takePicture({
-//         width: 800,
-//         height: 600,
-//         quality: 85
-//       });
-//       this.image = 'data:image/jpeg;base64,' + image;
-
-//            // Convert base64 image to blob
-//        //const fetchRes = await fetch(this.base64Image);
-//        //const blob = await fetchRes.blob();
-
-//        // Convert blob to data URL
-//        //this.imageChangedEvent = blob;
-
-
-//       // Remove the overlay
-//       document.body.removeChild(overlay);
-
-//       this.cameraActive = false;
-//       this.cameraPreview.stopCamera();
-//     });
-//  }
-
   async stopCamera() {
     await CameraPreview.stop();
     this.cameraActive = false;
@@ -348,8 +239,39 @@ export class ConsumptionCounterPage {
 
     const result = await CameraPreview.capture(cameraPreviewPictureOptions);
     this.image = `data:image/jpeg;base64,${result.value}`;
-    this.stopCamera();
-    this.showBody = true;
+
+    // Attendez que l'image soit chargée
+  let image = new Image();
+  image.onload = () => {
+    // Mettez à jour le imageChangedEvent avec le nouvel événement
+    let event = {
+      target: {
+        files: [this.dataURLtoFile(this.image, 'captured.jpg')],
+      },
+    };
+    this.imageChangedEvent = event;
+    
+    // Attendre que le cropper soit prêt puis effectuer le rognage
+    setTimeout(() => this.crop(), 2000);
+  }
+  image.src = this.image;
+
+  this.stopCamera();
+  this.showBody = true;
+  }
+
+  dataURLtoFile(dataurl: any, filename: any) {
+    let arr = dataurl.split(','),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+        
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+  
+    return new File([u8arr], filename, {type:mime});
   }
 }
 
