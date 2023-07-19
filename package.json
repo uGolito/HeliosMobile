@@ -42,6 +42,7 @@
     "@ionic/angular": "^6.1.9",
     "@types/offscreencanvas": "^2019.7.0",
     "canvas": "^2.11.2",
+    "capacitor-plugin-dynamsoft-camera-preview": "^1.2.0",
     "cordova-plugin-camera-preview": "^0.12.3",
     "cordova-plugin-mobile-ocr": "^3.1.2",
     "crypto-browserify": "^3.12.0",

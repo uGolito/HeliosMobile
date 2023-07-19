@@ -8,7 +8,7 @@
 
 <ion-content>   
 <!--<input type="file" (change)="fileChangeEvent($event)" />-->
-<div class="cameraPreview" id="cameraPreview">
+<div class="cameraPreview" id="cameraPreview" *ngIf="cameraActive">
   <div *ngIf="cameraActive">
     <img src="../../../assets/icon/favicon.png" class="image-overlay">
 
@@ -48,8 +48,8 @@
           [aspectRatio]="6 / 1.5"
           [autoCrop]=false
           format="png"
-          [cropperStaticHeight]=50
-          [cropperStaticWidth]=600
+
+
           (imageCropped)="imageCropped($event)"
           (imageLoaded)="imageLoaded($event)"
           (cropperReady)="cropperReady()"

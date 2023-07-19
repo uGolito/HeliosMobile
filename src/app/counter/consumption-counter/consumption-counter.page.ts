@@ -168,10 +168,10 @@ export class ConsumptionCounterPage {
   }
 
   cropperPositions: CropperPosition = {
-    x1: 100,
-    y1: 300,
-    x2: 550,
-    y2: 350
+    x1: 50,
+    y1: 50,
+    x2: 50,
+    y2: 50
   }
 
   getOverlayStyles() {
