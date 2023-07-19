@@ -27,7 +27,7 @@ export class ConsumptionCounterPage {
   workerReady = false;
   image: any;
   showBody = true;
-  //showCropper = false;
+  photoTaken = false;
   cropPosition = {x1: 100, y1: 50, x2: 300, y2: 200};
   
   imageChangedEvent: any = '';
@@ -192,14 +192,16 @@ export class ConsumptionCounterPage {
   }
 
   imageLoaded(image: LoadedImage) {
-    setTimeout(() => {
-      this.cropPosition = {
-        x1: 100,
-        y1: 50,
-        x2: 300,
-        y2: 200
-      };
-    },2);
+    if (this.photoTaken) {
+      setTimeout(() => {
+        this.cropPosition = {
+          x1: 100,
+          y1: 50,
+          x2: 300,
+          y2: 200
+        };
+      },2);
+    }
   }
   
   cropperReady() {
@@ -258,6 +260,7 @@ export class ConsumptionCounterPage {
 
   this.stopCamera();
   this.showBody = true;
+  this.photoTaken = true;
   }
 
   dataURLtoFile(dataurl: any, filename: any) {
