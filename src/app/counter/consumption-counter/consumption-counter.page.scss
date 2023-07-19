@@ -27,7 +27,7 @@ body {
 .overlay {
   position: absolute;
   border: 1px solid #fff; // ou toute autre couleur
-  background: rgba(255,255,255,0.3); // ou toute autre couleur
+  background: transparent!important; // ou toute autre couleur
   top: 100px!important;
   left:50px!important;
   width: 300px!important;

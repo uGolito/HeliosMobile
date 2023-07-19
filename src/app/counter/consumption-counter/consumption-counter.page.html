@@ -11,12 +11,7 @@
 
 <div class="cameraPreview" id="cameraPreview">
   <div *ngIf="cameraActive">
-    <img src="../../../assets/icon/favicon.png" class="image-overlay">
-    <div class="overlay" 
-      [style.left.px]="cropPosition.x1" 
-      [style.top.px]="cropPosition.y1" 
-      [style.width.px]="cropPosition.x2 - cropPosition.x1" 
-      [style.height.px]="cropPosition.y2 - cropPosition.y1">
+    <div class="overlay" style="background: transparent !important;">
     </div>
 
     <ion-button (click)="stopCamera()" expand="block" id="close">
