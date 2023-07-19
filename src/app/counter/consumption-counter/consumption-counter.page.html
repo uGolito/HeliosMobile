@@ -13,7 +13,6 @@
   <div *ngIf="cameraActive">
     <div class="overlay" style="background: transparent !important;">
     </div>
-
     <ion-button (click)="stopCamera()" expand="block" id="close">
       <ion-icon name="close-circle" slot="icon-only"></ion-icon>
     </ion-button>
@@ -43,19 +42,17 @@
   </div>
 </div>
 <img [src]="image" *ngIf="image && !cameraActive"/>
-<image-cropper
+<image-cropper class="cropper" style="background: transparent!important;"
           [imageURL]="image"
           [maintainAspectRatio]="true"
           [aspectRatio]="6 / 1.5"
           [autoCrop]=false
           format="png"
-
           [cropper]="cropPosition"
           (imageCropped)="imageCropped($event)"
           (imageLoaded)="imageLoaded($event)"
           (cropperReady)="cropperReady()"
           (loadImageFailed)="loadImageFailed()"
-          #imageCropper
       ></image-cropper>
 
       <ion-button *ngIf="!cameraActive" expand="block" shape="round" size="medium" (click)="openCamera()">Prendre une photo</ion-button>
