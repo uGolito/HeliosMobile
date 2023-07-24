@@ -242,39 +242,11 @@ export class ConsumptionCounterPage {
     const result = await CameraPreview.capture(cameraPreviewPictureOptions);
     this.image = `data:image/jpeg;base64,${result.value}`;
 
-    // Attendez que l'image soit chargée
-  let image = new Image();
-  image.onload = () => {
-    // Mettez à jour le imageChangedEvent avec le nouvel événement
-    let event = {
-      target: {
-        files: [this.dataURLtoFile(this.image, 'captured.jpg')],
-      },
-    };
-    this.imageChangedEvent = event;
-    
-    // Attendre que le cropper soit prêt puis effectuer le rognage
     setTimeout(() => this.crop(), 2000);
-  }
-  image.src = this.image;
 
-  this.stopCamera();
-  this.showBody = true;
-  this.photoTaken = true;
-  }
-
-  dataURLtoFile(dataurl: any, filename: any) {
-    let arr = dataurl.split(','),
-        mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[1]),
-        n = bstr.length,
-        u8arr = new Uint8Array(n);
-        
-    while(n--){
-        u8arr[n] = bstr.charCodeAt(n);
-    }
-  
-    return new File([u8arr], filename, {type:mime});
+    this.stopCamera();
+    this.showBody = true;
+    this.photoTaken = true;
   }
 }
 
