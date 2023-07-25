@@ -9,7 +9,7 @@ import { CameraPreview, CameraPreviewOptions, CameraPreviewPictureOptions } from
 import 'hammerjs';
 
 
-//import '@capacitor-community/camera-preview';
+import '@capacitor-community/camera-preview';
 
 
 @Component({
@@ -47,8 +47,6 @@ export class ConsumptionCounterPage {
       position: 'rear',
       parent: 'cameraPreview',
       className: 'cameraPreview',
-      width: window.screen.width,
-      height: window.screen.height,
       toBack: true
     };
     CameraPreview.start(options);
@@ -194,20 +192,18 @@ export class ConsumptionCounterPage {
   }
 
   imageLoaded(image: LoadedImage) {
-    setTimeout(() => {
-      this.cropper = {
-        x1: 100,
-        y1: 50,
-        x2: 300,
-        y2: 200
-      };
-    },2);
+    // setTimeout(() => {
+    //   this.cropper = {
+    //     x1: 100,
+    //     y1: 50,
+    //     x2: 300,
+    //     y2: 200
+    //   };
+    // },2);
   }
   
   cropperReady() {
-    if (this.photoTaken) {
-      
-    }
+
   }
 
 
@@ -225,7 +221,8 @@ export class ConsumptionCounterPage {
      const cameraPreviewOpts: CameraPreviewOptions = {
       parent: 'cameraPreview',
       className: 'cameraPreview',
-      position: 'rear'
+      position: 'rear',
+      toBack: true
      };
      CameraPreview.start(cameraPreviewOpts);
      this.cameraActive = true;
