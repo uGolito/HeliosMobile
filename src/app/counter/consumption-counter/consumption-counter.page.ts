@@ -48,7 +48,8 @@ export class ConsumptionCounterPage {
     const options: CameraPreviewOptions = {
       position: 'rear',
       parent: 'cameraPreview',
-      className: 'cameraPreview'
+      className: 'cameraPreview',
+      toBack: true
     };
     CameraPreview.start(options);
     // const intervalId = setInterval(() => {
@@ -173,15 +174,6 @@ export class ConsumptionCounterPage {
     y2: 350
   }
 
-  getOverlayStyles() {
-    return {
-      'top': this.cropperPositions.y1 + 'px',
-      'left': this.cropperPositions.x1 + 'px',
-      'width': (this.cropperPositions.x2 - this.cropperPositions.x1) + 'px',
-      'height': (this.cropperPositions.y2 - this.cropperPositions.y1) + 'px'
-    };
-  }
-
   numValues: string[] = [];
   num2Values: string[] = [];
   joinedValues: any;
@@ -258,81 +250,14 @@ export class ConsumptionCounterPage {
      const cameraPreviewOpts: CameraPreviewOptions = {
       parent: 'cameraPreview',
       className: 'cameraPreview',
-      position: 'rear'
+      position: 'rear',
+      toBack: true
      };
      CameraPreview.start(cameraPreviewOpts);
      this.cameraActive = true;
    }
 
   base64Image: string | undefined;
-
-
-//   async captureImage() {
-//     this.showBody = false;
-//     this.cameraActive = true;
-    
-//     // Add code to show overlay or preview
-//     // Create overlay
-//     // Create overlay
-// const overlay = document.createElement('div');
-// overlay.style.position = 'absolute';
-// overlay.style.top = '0';
-// overlay.style.left = '0';
-// overlay.style.width = '100%';
-// overlay.style.height = '100%';
-// overlay.style.background = `radial-gradient(circle at ${this.cropperPositions.x1}px ${this.cropperPositions.y1}px, transparent, rgba(0, 0, 0, 0.7))`;
-    
-//     // Create hole for cropper
-//     const hole = document.createElement('div');
-//     hole.style.position = 'absolute';
-//     hole.style.top = `${this.cropperPositions.y1}px`;
-//     hole.style.left = `${this.cropperPositions.x1}px`;
-//     hole.style.width = `${this.cropperPositions.x2 - this.cropperPositions.x1}px`;
-//     hole.style.height = `${this.cropperPositions.y2 - this.cropperPositions.y1}px`;
-//     hole.style.backgroundColor = 'transparent';
-    
-//     overlay.appendChild(hole);
-//     document.body.appendChild(overlay);
-  
-//      // Add a button to the overlay
-//      const captureButton = document.createElement('button');
-//      captureButton.innerText = 'Capture';
-//      captureButton.style.position = 'absolute';
-//      captureButton.style.bottom = '20px';
-//      captureButton.style.left = '50%';
-//      captureButton.style.transform = 'translateX(-50%)';
-//      overlay.appendChild(captureButton);
-
-  
-//      // Capture the image when the button is clicked
-//     captureButton.addEventListener('click', async () => {
-//   //     // Capture the image
-//   //     // Get the position of the cropping rectangle
-//   //     const cropperPosition = cropperElement.getBoundingClientRect();
-
-//        // Capture the image within the cropping rectangle
-//       const image: any = await this.cameraPreview.takePicture({
-//         width: 800,
-//         height: 600,
-//         quality: 85
-//       });
-//       this.image = 'data:image/jpeg;base64,' + image;
-
-//            // Convert base64 image to blob
-//        //const fetchRes = await fetch(this.base64Image);
-//        //const blob = await fetchRes.blob();
-
-//        // Convert blob to data URL
-//        //this.imageChangedEvent = blob;
-
-
-//       // Remove the overlay
-//       document.body.removeChild(overlay);
-
-//       this.cameraActive = false;
-//       this.cameraPreview.stopCamera();
-//     });
-//  }
 
   async stopCamera() {
     await CameraPreview.stop();
