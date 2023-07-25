@@ -227,7 +227,7 @@ export class ConsumptionCounterPage {
      const cameraPreviewOpts: CameraPreviewOptions = {
       parent: 'cameraPreview',
       className: 'cameraPreview',
-      position: 'rear'
+      position: 'front'
      };
      CameraPreview.start(cameraPreviewOpts);
      this.cameraActive = true;
