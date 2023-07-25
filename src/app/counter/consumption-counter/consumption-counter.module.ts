@@ -12,6 +12,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 import { CameraPreview } from '@capacitor-community/camera-preview';
 
 
+
 @NgModule({
   imports: [
     CommonModule,
