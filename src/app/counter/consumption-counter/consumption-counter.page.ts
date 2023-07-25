@@ -10,7 +10,7 @@ import { CameraPreview, CameraPreviewOptions, CameraPreviewPictureOptions } from
 import 'hammerjs';
 
 
-//import '@capacitor-community/camera-preview';
+import '@capacitor-community/camera-preview';
 
 
 @Component({
