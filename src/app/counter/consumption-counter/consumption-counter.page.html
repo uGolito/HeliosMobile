@@ -11,7 +11,7 @@
 
 <div class="cameraPreview" id="cameraPreview">
   <div *ngIf="cameraActive">
-    <div class="overlay" style="background: transparent !important;">
+    <div class="overlay" style="background: transparent !important;" *ngIf="cameraActive">
     </div>
     <ion-button (click)="stopCamera()" expand="block" id="close">
       <ion-icon name="close-circle" slot="icon-only"></ion-icon>
