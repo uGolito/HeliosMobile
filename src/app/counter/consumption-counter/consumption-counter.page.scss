@@ -7,6 +7,11 @@ ion-content {
   position: absolute;
   bottom: 0;
   width: 100%;
+  background: transparent!important;
+}
+
+html, body {
+  background: transparent!important;
 }
 
 .camera-overlay {
