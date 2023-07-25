@@ -44,7 +44,7 @@ export class ConsumptionCounterPage {
 
   openCamera() {
     const options: CameraPreviewOptions = {
-      position: 'rear',
+      position: 'front',
       parent: 'cameraPreview',
       className: 'cameraPreview',
       toBack: true
