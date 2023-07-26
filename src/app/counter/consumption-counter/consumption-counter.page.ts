@@ -29,7 +29,7 @@ export class ConsumptionCounterPage {
   image: any;
   showBody = true;
   //showCropper = false;
-  cropPosition = {x1: 100, y1: 50, x2: 350, y2: 300};
+  cropPosition = {x1: 25, y1: 50, x2: 325, y2: 150};
   
   imageChangedEvent: any = '';
   croppedImage: any = '';
@@ -218,10 +218,10 @@ export class ConsumptionCounterPage {
   imageLoaded(image: LoadedImage) {
     setTimeout(() => {
       this.cropPosition = {
-        x1: 100,
+        x1: 25,
         y1: 50,
-        x2: 350,
-        y2: 300
+        x2: 325,
+        y2: 150
       };
     },2);
   }
