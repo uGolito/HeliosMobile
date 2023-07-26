@@ -29,7 +29,8 @@ export class ConsumptionCounterPage {
   image: any;
   showBody = true;
   //showCropper = false;
-  cropPosition = {x1: 25, y1: 50, x2: 325, y2: 150};
+  headerHeight = 160; // Remplacez par la hauteur réelle de votre header
+  cropPosition = {x1: 25, y1: 50 + this.headerHeight, x2: 325, y2: 150 + this.headerHeight};
   
   imageChangedEvent: any = '';
   croppedImage: any = '';
