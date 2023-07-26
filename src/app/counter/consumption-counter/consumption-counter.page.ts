@@ -30,7 +30,7 @@ export class ConsumptionCounterPage {
   showBody = true;
   //showCropper = false;
   headerHeight = 160; // Remplacez par la hauteur réelle de votre header
-  cropPosition = {x1: 25, y1: 50 + this.headerHeight, x2: 325, y2: 150 + this.headerHeight};
+  cropPosition = {x1: 25, y1: 210, x2: 325, y2: 310};
   
   imageChangedEvent: any = '';
   croppedImage: any = '';
@@ -218,7 +218,7 @@ export class ConsumptionCounterPage {
 
   imageLoaded(image: LoadedImage) {
     setTimeout(() => {
-      this.cropPosition = {x1: 25, y1: 50 + this.headerHeight, x2: 325, y2: 150 + this.headerHeight};
+      this.cropPosition = {x1: 25, y1: 210, x2: 325, y2: 310};
     },2);
   }
   
