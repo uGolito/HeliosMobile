@@ -218,12 +218,7 @@ export class ConsumptionCounterPage {
 
   imageLoaded(image: LoadedImage) {
     setTimeout(() => {
-      this.cropPosition = {
-        x1: 25,
-        y1: 50,
-        x2: 325,
-        y2: 150
-      };
+      this.cropPosition = {x1: 25, y1: 50 + this.headerHeight, x2: 325, y2: 150 + this.headerHeight};
     },2);
   }
   
