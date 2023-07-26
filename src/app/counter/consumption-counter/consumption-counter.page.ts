@@ -5,7 +5,8 @@ import * as Tesseract from 'tesseract.js';
 import { createWorker } from 'tesseract.js';
 import { CropperPosition, LoadedImage, ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 import { DomSanitizer } from '@angular/platform-browser';
-import { CameraPreview, CameraPreviewOptions, CameraPreviewPictureOptions } from '@capacitor-community/camera-preview';
+//import { CameraPreview, CameraPreviewOptions, CameraPreviewPictureOptions } from '@capacitor-community/camera-preview';
+import { CameraPreview, CameraPreviewPictureOptions, CameraPreviewOptions, CameraPreviewDimensions } from '@awesome-cordova-plugins/camera-preview/ngx';
 import 'hammerjs';
 
 
@@ -37,22 +38,45 @@ export class ConsumptionCounterPage {
   constructor(public navCtrl: NavController, 
               private route: Router, 
               private sanitizer: DomSanitizer, 
-              private el : ElementRef, 
-              private renderer: Renderer2) {
+              private cameraPreview: CameraPreview
+              ) {
     //this.loadWorker();
   }
 
+  // openCamera() {
+  //   const options: CameraPreviewOptions = {
+  //     position: 'rear',
+  //     parent: 'cameraPreview',
+  //     className: 'cameraPreview',
+  //     toBack: true
+  //   };
+  //   CameraPreview.start(options);
+    
+  //   this.cameraActive = true;
+  //   this.showBody = true;
+  // }
   openCamera() {
     const options: CameraPreviewOptions = {
-      position: 'rear',
-      parent: 'cameraPreview',
-      className: 'cameraPreview',
-      toBack: true
+      x: 0,
+      y: 0,
+      width: window.screen.width,
+      height: window.screen.height,
+      camera: 'rear',
+      tapPhoto: true,
+      previewDrag: true,
+      toBack: true,
+      alpha: 1,
+      storeToFile: false
     };
-    CameraPreview.start(options);
-    
-    this.cameraActive = true;
-    this.showBody = true;
+    this.cameraPreview.startCamera(options).then(
+      (res) => {
+        console.log(res);
+        this.cameraActive = true;
+        this.showBody = true;
+      },
+      (err) => {
+        console.log(err);
+      });
   }
 
   async loadWorker() {
@@ -216,62 +240,57 @@ export class ConsumptionCounterPage {
     }
   }
 
-  startCameraPreview() {
-     const cameraPreviewOpts: CameraPreviewOptions = {
-      parent: 'cameraPreview',
-      className: 'cameraPreview',
-      position: 'rear'
-     };
-     CameraPreview.start(cameraPreviewOpts);
-     this.cameraActive = true;
-   }
+  // startCameraPreview() {
+  //    const cameraPreviewOpts: CameraPreviewOptions = {
+  //     parent: 'cameraPreview',
+  //     className: 'cameraPreview',
+  //     position: 'rear'
+  //    };
+  //    CameraPreview.start(cameraPreviewOpts);
+  //    this.cameraActive = true;
+  //  }
 
-  async stopCamera() {
-    await CameraPreview.stop();
-    this.cameraActive = false;
-    this.showBody = true;
-  }
+  // async stopCamera() {
+  //   await CameraPreview.stop();
+  //   this.cameraActive = false;
+  //   this.showBody = true;
+  // }
 
+  // async captureImage() {
+  //   const cameraPreviewPictureOptions: CameraPreviewPictureOptions = {
+  //     quality: 90,
+  //   };
+
+  //   const result = await CameraPreview.capture(cameraPreviewPictureOptions);
+  //   this.image = `data:image/jpeg;base64,${result.value}`;
+
+  //   setTimeout(() => this.crop(), 2000);
+
+  //   this.stopCamera();
+  //   this.showBody = true;
+  // }
   async captureImage() {
     const cameraPreviewPictureOptions: CameraPreviewPictureOptions = {
-      quality: 90,
+      width: 1280,
+      height: 1280,
+      quality: 85
     };
 
-    const result = await CameraPreview.capture(cameraPreviewPictureOptions);
-    this.image = `data:image/jpeg;base64,${result.value}`;
-
-    // Attendez que l'image soit chargée
-  let image = new Image();
-  image.onload = () => {
-    // Mettez à jour le imageChangedEvent avec le nouvel événement
-    let event = {
-      target: {
-        files: [this.dataURLtoFile(this.image, 'captured.jpg')],
-      },
-    };
-    this.imageChangedEvent = event;
-    
-    // Attendre que le cropper soit prêt puis effectuer le rognage
-    setTimeout(() => this.crop(), 2000);
-  }
-  image.src = this.image;
-
-  this.stopCamera();
-  this.showBody = true;
+    this.cameraPreview.takePicture(cameraPreviewPictureOptions).then((imageData) => {
+      this.image = 'data:image/jpeg;base64,' + imageData;
+      setTimeout(() => this.crop(), 2000);
+      this.stopCamera();
+      this.showBody = true;
+    }, (err) => {
+      console.log(err);
+      this.image = 'assets/img/test.jpg'; // fallback photo
+    });
   }
 
-  dataURLtoFile(dataurl: any, filename: any) {
-    let arr = dataurl.split(','),
-        mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[1]),
-        n = bstr.length,
-        u8arr = new Uint8Array(n);
-        
-    while(n--){
-        u8arr[n] = bstr.charCodeAt(n);
-    }
-  
-    return new File([u8arr], filename, {type:mime});
+  async stopCamera() {
+    this.cameraPreview.stopCamera();
+    this.cameraActive = false;
+    this.showBody = true;
   }
 }
 
